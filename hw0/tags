@@ -1,11 +1,97 @@
-Image	imageloader.cpp	/^Image::~Image() {$/
-Vec3f	vec3f.cpp	/^Vec3f::Vec3f() {$/
-cross	vec3f.cpp	/^Vec3f Vec3f::cross(const Vec3f &other) const {$/
-dot	vec3f.cpp	/^float Vec3f::dot(const Vec3f &other) const {$/
-height	imageloader.cpp	/^Image::Image(char* ps, int w, int h) : pixels(ps),/
-ifeq	Makefile	/^ifeq ($(shell uname),Darwin)$/
+$$$	heightmap2.bmp	97
+$(PROG	Makefile	/^$(PROG):	$(SRCS)$/
+::auto_array	imageloader.cpp	71
+::auto_array::array	imageloader.cpp	73
+::auto_array::auto_array	imageloader.cpp	/^			explicit auto_array(T* array_ = NULL) :$/
+::auto_array::auto_array	imageloader.cpp	/^			auto_array(const auto_array<T> &aarray) {$/
+::auto_array::get	imageloader.cpp	/^			T* get() const {$/
+::auto_array::isReleased	imageloader.cpp	74
+::auto_array::operator*	imageloader.cpp	/^			T &operator*() const {$/
+::auto_array::operator+	imageloader.cpp	/^			T* operator+(int i) {$/
+::auto_array::operator->	imageloader.cpp	/^			T* operator->() const {$/
+::auto_array::operator=	imageloader.cpp	/^			void operator=(const auto_array<T> &aarray) {$/
+::auto_array::release	imageloader.cpp	/^			T* release() {$/
+::auto_array::reset	imageloader.cpp	/^			void reset(T* array_ = NULL) {$/
+::auto_array::~auto_array	imageloader.cpp	/^			~auto_array() {$/
+::readInt	imageloader.cpp	/^	int readInt(ifstream &input) {$/
+::readShort	imageloader.cpp	/^	short readShort(ifstream &input) {$/
+::toInt	imageloader.cpp	/^	int toInt(const char* bytes) {$/
+::toShort	imageloader.cpp	/^	short toShort(const char* bytes) {$/
+AAAKKKUUU	heightmap2.bmp	295
+B	storms.gif	4
+CC	Makefile	/^CC = g++$/
+CCCMMMTTTZZZ___ccceeeggghhhhhhgggfffdddaaa	heightmap2.bmp	286
+CFLAGS	Makefile	/^CFLAGS = -Wall$/
+HâbÇ	storms.gif	59
+IIITTT	heightmap2.bmp	139
+IMAGE_LOADER_H_INCLUDED	imageloader.h	26
+Image	imageloader.h	29
+Image::Image	imageloader.cpp	/^Image::Image(char* ps, int w, int h) : pixels(ps),/
+Image::height	imageloader.h	42
+Image::pixels	imageloader.h	40
+Image::width	imageloader.h	41
+Image::~Image	imageloader.cpp	/^Image::~Image() {$/
+J	storms.gif	108
+J¥	storms.gif	2
+Ká	storms.gif	2
+MM	heightmap2.bmp	277
+Mmain.cpp	main.cpp	/^int main(int argc, char** argv) {$/
+NNN	heightmap2.bmp	442
+PROG	Makefile	/^PROG = terrain$/
+P£JùJµ™	storms.gif	2
+P§f	storms.gif	69
+SRCS	Makefile	/^SRCS = main.cpp imageloader.cpp vec3f.cpp$/
+SSGGG	heightmap2.bmp	436
+UUUQQQQQQUUU	heightmap2.bmp	1291
+VEC3F_H_INCLUDED	vec3f.h	26
+VVRRRPPPPPPSSSWWW	heightmap2.bmp	1321
+VVVQQQKKKDDD	heightmap2.bmp	205
+Vec3f	vec3f.h	30
+Vec3f::Vec3f	vec3f.cpp	/^Vec3f::Vec3f() {$/
+Vec3f::Vec3f	vec3f.cpp	/^Vec3f::Vec3f(float x, float y, float z) {$/
+Vec3f::cross	vec3f.cpp	/^Vec3f Vec3f::cross(const Vec3f &other) const {$/
+Vec3f::dot	vec3f.cpp	/^float Vec3f::dot(const Vec3f &other) const {$/
+Vec3f::magnitude	vec3f.cpp	/^float Vec3f::magnitude() const {$/
+Vec3f::magnitudeSquared	vec3f.cpp	/^float Vec3f::magnitudeSquared() const {$/
+Vec3f::normalize	vec3f.cpp	/^Vec3f Vec3f::normalize() const {$/
+Vec3f::operator*	vec3f.cpp	/^Vec3f Vec3f::operator*(float scale) const {$/
+Vec3f::operator*=	vec3f.cpp	/^const Vec3f &Vec3f::operator*=(float scale) {$/
+Vec3f::operator+	vec3f.cpp	/^Vec3f Vec3f::operator+(const Vec3f &other) const {/
+Vec3f::operator+=	vec3f.cpp	/^const Vec3f &Vec3f::operator+=(const Vec3f &other)/
+Vec3f::operator-	vec3f.cpp	/^Vec3f Vec3f::operator-(const Vec3f &other) const {/
+Vec3f::operator-	vec3f.cpp	/^Vec3f Vec3f::operator-() const {$/
+Vec3f::operator-=	vec3f.cpp	/^const Vec3f &Vec3f::operator-=(const Vec3f &other)/
+Vec3f::operator/	vec3f.cpp	/^Vec3f Vec3f::operator\/(float scale) const {$/
+Vec3f::operator/=	vec3f.cpp	/^const Vec3f &Vec3f::operator\/=(float scale) {$/
+Vec3f::v	vec3f.h	32
+YYYUUURRRPPPPPPQQQSSSUUUWWWWWWXXXWWWXXXYYY	heightmap2.bmp	286
+Zk	storms.gif	115
+ZZZZZ	heightmap2.bmp	319
+______	heightmap2.bmp	286
+___aaadddhhhkkklllllljjjhhheeeddddddgggjjjnnnqqqpppmmmggg	heightmap2.bmp	319
+a5‘	storms.gif	11
+all	Makefile	/^all: $(PROG)$/
+bbbgggkkkppptttwwwyyyyyyyyywwwuuusssqqqmmmhhhccc	heightmap2.bmp	1357
+clean	Makefile	/^clean:$/
+cleanup	main.cpp	/^void cleanup() {$/
+d	storms.gif	92
+dddhhhjjjiiihhhgggggggggfffddd	heightmap2.bmp	295
+drawScene	main.cpp	/^void drawScene() {$/
+handleKeypress	main.cpp	/^void handleKeypress(unsigned char key, int x, int /
+handleResize	main.cpp	/^void handleResize(int w, int h) {$/
+initRendering	main.cpp	/^void initRendering() {$/
+k¸ÛIŸ›	storms.gif	93
 loadBMP	imageloader.cpp	/^Image* loadBMP(const char* filename) {$/
-magnitude	vec3f.cpp	/^float Vec3f::magnitude() const {$/
-magnitudeSquared	vec3f.cpp	/^float Vec3f::magnitudeSquared() const {$/
-normalize	vec3f.cpp	/^Vec3f Vec3f::normalize() const {$/
-operator	vec3f.cpp	/^Vec3f Vec3f::operator*(float scale) const {$/
+operator*	vec3f.cpp	/^Vec3f operator*(float scale, const Vec3f &v) {$/
+operator<<	vec3f.cpp	/^ostream &operator<<(ostream &output, const Vec3f &/
+p	storms.gif	5
+q	storms.gif	71
+rs	storms.gif	74
+ssshhh	heightmap2.bmp	337
+update	main.cpp	/^void update(int value) {$/
+w©N	storms.gif	93
+xxxnnncccZZZSSSPPPPPPSSSXXX	heightmap2.bmp	1357
+xxxqqqfffYYYKKK	heightmap2.bmp	1291
+yyyooodddYYYOOOGGGAAA	heightmap2.bmp	1321
+~HMJÖ	storms.gif	108
+Ï	storms.gif	89
