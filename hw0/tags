@@ -1,0 +1,11 @@
+Image	imageloader.cpp	/^Image::~Image() {$/
+Vec3f	vec3f.cpp	/^Vec3f::Vec3f() {$/
+cross	vec3f.cpp	/^Vec3f Vec3f::cross(const Vec3f &other) const {$/
+dot	vec3f.cpp	/^float Vec3f::dot(const Vec3f &other) const {$/
+height	imageloader.cpp	/^Image::Image(char* ps, int w, int h) : pixels(ps),/
+ifeq	Makefile	/^ifeq ($(shell uname),Darwin)$/
+loadBMP	imageloader.cpp	/^Image* loadBMP(const char* filename) {$/
+magnitude	vec3f.cpp	/^float Vec3f::magnitude() const {$/
+magnitudeSquared	vec3f.cpp	/^float Vec3f::magnitudeSquared() const {$/
+normalize	vec3f.cpp	/^Vec3f Vec3f::normalize() const {$/
+operator	vec3f.cpp	/^Vec3f Vec3f::operator*(float scale) const {$/
