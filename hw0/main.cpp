@@ -236,9 +236,11 @@ void drawScene() {
 				 -(float)(_terrain->length() - 1) / 2);
 	
 	glColor3f(0.3f, 0.9f, 0.0f);
+  // all of this is to cut off the bottom of the object to make it appear to have rough edges
 	GLdouble cutplane[] = {0.f, 1.f, 0.f, 9.f};
 	glClipPlane(GL_CLIP_PLANE0, cutplane);
 	glEnable(GL_CLIP_PLANE0);
+  // end clipping plane
 	for(int z = 0; z < _terrain->length() - 1; z++) {
 		//Makes OpenGL draw a triangle at every three consecutive vertices
 		glBegin(GL_TRIANGLE_STRIP);
