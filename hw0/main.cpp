@@ -185,6 +185,7 @@ Terrain* loadTerrain(const char* filename, float height) {
 float _angle = 60.0f;
 Terrain* _terrain;
 
+
 void cleanup() {
 	delete _terrain;
 }
