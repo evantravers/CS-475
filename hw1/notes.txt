@@ -1,0 +1,6 @@
+fstream input;
+float val;
+input.open("file.txt");
+input >> val;
+input.close();
+// while val is a float
