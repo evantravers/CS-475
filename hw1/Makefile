@@ -1,8 +1,8 @@
 CC = g++
 CFLAGS = -Wall
-PROG = hw1
+PROG = terrain
 
-SRCS = main.cpp
+SRCS = main.cpp imageloader.cpp vec3f.cpp
 
 ifeq ($(shell uname),Darwin)
 	LIBS = -framework OpenGL -framework GLUT
