@@ -13,7 +13,7 @@
 
 using namespace std;
 
-//Represents a terrain, by storing a set of heights and normals at 2D locations
+//Represents a terrain, by storing a set of heights and normals at 2D eocations
 class Terrain {
 	private:
 		int w; //Width
@@ -170,6 +170,8 @@ Terrain* loadTerrain(const char* filename, float height) {
 	Terrain* t = new Terrain(image->width, image->height);
 	for(int y = 0; y < image->height; y++) {
 		for(int x = 0; x < image->width; x++) {
+      // i want to assign color in here somewhere
+
 			unsigned char color =
 				(unsigned char)image->pixels[3 * (y * image->width + x)];
 			float h = height * ((color / 255.0f) - 0.5f);
@@ -195,6 +197,7 @@ void handleKeypress(unsigned char key, int x, int y) {
 			cleanup();
 			exit(0);
 	}
+  printf("%c\n", key);
 }
 void initRendering() {
 	glEnable(GL_DEPTH_TEST);
@@ -209,7 +212,7 @@ void handleResize(int w, int h) {
 	glViewport(0, 0, w, h);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(45.0, (double)w / (double)h, 1.0, 200.0);
+	gluPerspective(30.0, (double)w / (double)h, 1.0, 200.0);
 }
 
 void drawScene() {
@@ -229,7 +232,7 @@ void drawScene() {
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, lightColor0);
 	glLightfv(GL_LIGHT0, GL_POSITION, lightPos0);
 	
-	float scale = 5.0f / max(_terrain->width() - 1, _terrain->length() - 1);
+	float scale = 6.0f / max(_terrain->width() - 1, _terrain->length() - 1);
 	glScalef(scale, scale, scale);
 	glTranslatef(-(float)(_terrain->width() - 1) / 2,
 				 0.0f,
@@ -241,10 +244,18 @@ void drawScene() {
 	glClipPlane(GL_CLIP_PLANE0, cutplane);
 	glEnable(GL_CLIP_PLANE0);
   // end clipping plane
+	Image* colors = loadBMP("heightmapcolor.bmp");
+
 	for(int z = 0; z < _terrain->length() - 1; z++) {
 		//Makes OpenGL draw a triangle at every three consecutive vertices
 		glBegin(GL_TRIANGLE_STRIP);
 		for(int x = 0; x < _terrain->width(); x++) {
+
+      unsigned char redcolor = (unsigned char)colors ->pixels[3*(z * colors->width + x)];
+      unsigned char greencolor = (unsigned char)colors ->pixels[3*(z * colors->width + x)+1];
+      unsigned char bluecolor = (unsigned char)colors ->pixels[3*(z * colors->width + x)+2];
+      glColor3f((float)redcolor/255.0f, (float) greencolor/255.0f, (float) bluecolor/255.0f);
+
 			Vec3f normal = _terrain->getNormal(x, z);
 			glNormal3f(normal[0], normal[1], normal[2]);
 			glVertex3f(x, _terrain->getHeight(x, z), z);
