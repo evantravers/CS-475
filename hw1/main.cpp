@@ -173,7 +173,7 @@ Terrain* loadTerrain(const char* filename, float height) {
       // i want to assign color in here somewhere
 
 			unsigned char color =
-				(unsigned char)image->pixels[3 * (y * image->width + x)];
+				(unsigned char)image->pixels[3 * (y * image->width + x)+1];
 			float h = height * ((color / 255.0f) - 0.5f);
 			t->setHeight(x, y, h);
 		}
@@ -197,7 +197,6 @@ void handleKeypress(unsigned char key, int x, int y) {
 			cleanup();
 			exit(0);
 	}
-  printf("%c\n", key);
 }
 void initRendering() {
 	glEnable(GL_DEPTH_TEST);
@@ -240,7 +239,7 @@ void drawScene() {
 	
 	glColor3f(0.3f, 0.9f, 0.0f);
   // all of this is to cut off the bottom of the object to make it appear to have rough edges
-	GLdouble cutplane[] = {0.f, 1.f, 0.f, 9.f};
+	GLdouble cutplane[] = {0.f, 1.f, 0.f, 14.f};
 	glClipPlane(GL_CLIP_PLANE0, cutplane);
 	glEnable(GL_CLIP_PLANE0);
   // end clipping plane
@@ -287,7 +286,7 @@ int main(int argc, char** argv) {
 	glutCreateWindow("WINTER STORM ALERT");
 	initRendering();
 	
-	_terrain = loadTerrain("heightmap2.bmp", 20);
+	_terrain = loadTerrain("heightmap2.bmp", 30);
 	
 	glutDisplayFunc(drawScene);
 	glutKeyboardFunc(handleKeypress);
