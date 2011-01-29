@@ -1,0 +1,4 @@
+1. Read in the ppm files
+2. Find the edges of each slice, putting a vertice there.
+3. Connect the vertices
+4. Normalize, extrapolate, and render.
