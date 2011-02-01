@@ -8,7 +8,6 @@
 #include <GL/glut.h>
 #endif
 
-#include "imageloader.h"
 #include "vec3f.h"
 
 using namespace std;
@@ -61,7 +60,9 @@ void drawScene() {
 	glColor3f(0.3f, 0.9f, 0.0f);
 
   // this is where you should draw your objects
+  // there had better be code here by tomorrow or I will make you sad.
 	
+
 	glutSwapBuffers();
 }
 
