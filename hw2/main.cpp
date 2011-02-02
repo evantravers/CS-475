@@ -12,6 +12,27 @@
 
 using namespace std;
 
+class eggMesh {
+public:
+  // the builder should find a data folder, and get the images out of it, build a mesh from them.
+  eggMesh ();
+  virtual ~eggMesh () {
+    // this should destroy the mesh
+  };
+
+  eggMesh() {
+    // go to the data folder
+    // get images 1-9
+    // for each layer, find n points on the egg white
+    // connect vertices for fun and profit
+  }
+
+private:
+  /* data */
+  Vec3f** normals;
+  bool computedNormals;
+};
+
 float _angle = 60.0f;
 
 void cleanup() {
@@ -61,7 +82,8 @@ void drawScene() {
 
   // this is where you should draw your objects
   // there had better be code here by tomorrow or I will make you sad.
-	
+  glBegin(GL_TRIANGLES);
+  glEnd();
 
 	glutSwapBuffers();
 }
