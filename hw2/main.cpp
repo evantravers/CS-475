@@ -42,7 +42,7 @@ void handleResize(int w, int h) {
 	glViewport(0, 0, w, h);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(30.0, (double)w / (double)h, 1.0, 200.0);
+	gluPerspective(50.0, (double)w / (double)h, 1.0, 900.0);
 }
 
 void drawScene() {
@@ -50,7 +50,7 @@ void drawScene() {
 	
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glTranslatef(0.0f, 0.0f, -30.0f);
+	glTranslatef(0.0f, 0.0f, -350.0f);
 	glRotatef(30.0f, 1.0f, 0.0f, 0.0f);
 	glRotatef(-_angle, 0.0f, 1.0f, 0.0f);
 	
@@ -62,8 +62,6 @@ void drawScene() {
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, lightColor0);
 	glLightfv(GL_LIGHT0, GL_POSITION, lightPos0);
 	
-	glColor3f(0.3f, 0.9f, 0.0f);
-
   // this is where you should draw your objects
   // there had better be code here by tomorrow or I will make you sad.
   // I should take the eggMesh that I hopefully created, consisting of two solid objects 
@@ -105,14 +103,20 @@ void drawScene() {
       }
       int width = image->width;
       int height = image->height;
-
-      int z = i;
-      int x, y;
+      int y = i;
+      int x, z;
+      int ii = 150;
       for (x = 0; x < width; x++) {
-        for (y = 0; y < height; y++) {
-          unsigned char redcolor = (unsigned char)image ->pixels[3*(x * image->width + y)];
-          // unsigned char greencolor = (unsigned char)image ->pixels[3*(z * image->width + x)+1];
-          unsigned char bluecolor = (unsigned char)image ->pixels[3*(z * image->width + x)+2];
+        for (z = 0; z < height; z++) {
+            unsigned char redcolor = 0;
+            unsigned char bluecolor = 0;
+            if (ii < width * height * 3) {
+              redcolor = (unsigned char)image ->pixels[ii];
+              // unsigned char redcolor = (unsigned char)image ->pixels[i];
+              // unsigned char greencolor = (unsigned char)image ->pixels[3*(z * image->width + x)+1];
+              bluecolor = (unsigned char)image ->pixels[ii+2];
+            }
+            ii += 3;
           // printf("%f, %f, %f\n", (float)redcolor/255.0f, (float)greencolor/255.0f, (float)bluecolor/255.0f);
           // if the color is close to white, then draw egg
           // if red is really low, then background
@@ -121,17 +125,23 @@ void drawScene() {
           int red = (int)redcolor;
           int blue = (int)bluecolor;
           if (red>220) {
-            if (blue>100) {
+            // then we are inside the egg
+            if (blue>110) {
+              // we are looking at egg white
               glColor3f(9.5f, 9.5f, 9.5f);
             }
             else {
-              glColor3f(9.5f, 3.5f, 3.5f);
+              // this should be yolk
+              glColor3f(0.7f, 0.9f, 0.1f);
             }
-            glVertex3f((float)x/30.f, (float)z/2.5f, (float)y/30.f);
+            glVertex3i(x, y*12, z);
           }
-
+          else {
+            // glColor3f(0.0f, 0.0f, 0.9f);
+            //             glVertex3i(x, y*12, z);
+          }  
         }
-      }  
+      }
     }
   glEnd();
 
