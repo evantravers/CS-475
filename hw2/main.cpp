@@ -50,7 +50,7 @@ void drawScene() {
 	
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glTranslatef(0.0f, 0.0f, -350.0f);
+	glTranslatef(0.0f, 0.0f, -950.0f);
 	glRotatef(30.0f, 1.0f, 0.0f, 0.0f);
 	glRotatef(-_angle, 0.0f, 1.0f, 0.0f);
 	
@@ -105,18 +105,14 @@ void drawScene() {
       int height = image->height;
       int y = i;
       int x, z;
-      int ii = 150;
       for (x = 0; x < width; x++) {
         for (z = 0; z < height; z++) {
-            unsigned char redcolor = 0;
-            unsigned char bluecolor = 0;
-            if (ii < width * height * 3) {
-              redcolor = (unsigned char)image ->pixels[ii];
-              // unsigned char redcolor = (unsigned char)image ->pixels[i];
-              // unsigned char greencolor = (unsigned char)image ->pixels[3*(z * image->width + x)+1];
-              bluecolor = (unsigned char)image ->pixels[ii+2];
-            }
-            ii += 3;
+          unsigned char redcolor = 0;
+          unsigned char bluecolor = 0;
+          redcolor = (unsigned char)image ->pixels[3*(z * image->width + x)];
+          // unsigned char redcolor = (unsigned char)image ->pixels[i];
+          // unsigned char greencolor = (unsigned char)image ->pixels[3*(z * image->width + x)+1];
+          bluecolor = (unsigned char)image ->pixels[3*(z * image->width + x)+2];
           // printf("%f, %f, %f\n", (float)redcolor/255.0f, (float)greencolor/255.0f, (float)bluecolor/255.0f);
           // if the color is close to white, then draw egg
           // if red is really low, then background
