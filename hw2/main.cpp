@@ -1,5 +1,6 @@
 #include <iostream>
 #include <stdlib.h>
+#include <stdio.h>
 #include <math.h>
 
 #ifdef __APPLE__
@@ -69,38 +70,13 @@ void drawScene() {
   
   glBegin(GL_POINTS);
     // crawl the images
+    char filename[21];
     int i=1;
+    // this is where you specify the number of slices
     for (i = 1; i < 10; i++) {
-      // sprintf(filename,"data/%i.bmp",i);
-      // printf("%s\n", filename);
+      sprintf(filename, "data/%d.bmp",i);
       Image* image;
-      if (i==1) {
-        image = loadBMP("data/1.bmp");
-      }
-      if (i==2) {
-        image = loadBMP("data/2.bmp");
-      }
-      if (i==3) {
-        image = loadBMP("data/3.bmp");
-      }
-      if (i==4) {
-        image = loadBMP("data/4.bmp");
-      }
-      if (i==5) {
-        image = loadBMP("data/5.bmp");
-      }
-      if (i==6) {
-        image = loadBMP("data/6.bmp");
-      }
-      if (i==7) {
-        image = loadBMP("data/7.bmp");
-      }
-      if (i==8) {
-        image = loadBMP("data/8.bmp");
-      }
-      if (i==9) {
-        image = loadBMP("data/9.bmp");
-      }
+      image = loadBMP(filename);
       int width = image->width;
       int height = image->height;
       int y = i;
@@ -130,7 +106,7 @@ void drawScene() {
               // this should be yolk
               glColor3f(0.7f, 0.9f, 0.1f);
             }
-            glVertex3i(x, y*12, z);
+            glVertex3i(x, y*20, z);
           }
           else {
             // glColor3f(0.0f, 0.0f, 0.9f);
