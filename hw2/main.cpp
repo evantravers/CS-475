@@ -1,5 +1,6 @@
 #include <iostream>
 #include <stdlib.h>
+#include <math.h>
 
 #ifdef __APPLE__
 #include <OpenGL/OpenGL.h>
@@ -16,7 +17,7 @@ using namespace std;
 // for storing vertexes
 
 
-float _angle = 60.0f;
+float _angle = 30.0f;
 
 void cleanup() {
 }
@@ -49,7 +50,7 @@ void drawScene() {
 	
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glTranslatef(0.0f, 0.0f, -10.0f);
+	glTranslatef(0.0f, 0.0f, -30.0f);
 	glRotatef(30.0f, 1.0f, 0.0f, 0.0f);
 	glRotatef(-_angle, 0.0f, 1.0f, 0.0f);
 	
@@ -70,27 +71,65 @@ void drawScene() {
   
   glBegin(GL_POINTS);
     // crawl the images
-    int i;
-    for (i = 0; i < 9; i++) {
-      char* filename;
-      sprintf(filename,"/data/egg%c.bmp",(char)i);
-      Image* image = loadBMP(filename);
+    int i=1;
+    for (i = 1; i < 10; i++) {
+      // sprintf(filename,"data/%i.bmp",i);
+      // printf("%s\n", filename);
+      Image* image;
+      if (i==1) {
+        image = loadBMP("data/1.bmp");
+      }
+      if (i==2) {
+        image = loadBMP("data/2.bmp");
+      }
+      if (i==3) {
+        image = loadBMP("data/3.bmp");
+      }
+      if (i==4) {
+        image = loadBMP("data/4.bmp");
+      }
+      if (i==5) {
+        image = loadBMP("data/5.bmp");
+      }
+      if (i==6) {
+        image = loadBMP("data/6.bmp");
+      }
+      if (i==7) {
+        image = loadBMP("data/7.bmp");
+      }
+      if (i==8) {
+        image = loadBMP("data/8.bmp");
+      }
+      if (i==9) {
+        image = loadBMP("data/9.bmp");
+      }
       int width = image->width;
       int height = image->height;
 
-      int z = 0;
+      int z = i;
       int x, y;
       for (x = 0; x < width; x++) {
         for (y = 0; y < height; y++) {
-          unsigned char redcolor = (unsigned char)image ->pixels[3*(z * image->width + x)];
-          unsigned char greencolor = (unsigned char)image ->pixels[3*(z * image->width + x)+1];
+          unsigned char redcolor = (unsigned char)image ->pixels[3*(x * image->width + y)];
+          // unsigned char greencolor = (unsigned char)image ->pixels[3*(z * image->width + x)+1];
           unsigned char bluecolor = (unsigned char)image ->pixels[3*(z * image->width + x)+2];
-          printf("%c, %c, %c\n", redcolor, greencolor, bluecolor);
+          // printf("%f, %f, %f\n", (float)redcolor/255.0f, (float)greencolor/255.0f, (float)bluecolor/255.0f);
           // if the color is close to white, then draw egg
-          if (0) {
-            /* code */
-            glVertex3f((float)x, (float)y, z);
+          // if red is really low, then background
+          // if red is high, and blue is high, then egg
+          // if red is high, and blue is around 100, then yolk
+          int red = (int)redcolor;
+          int blue = (int)bluecolor;
+          if (red>220) {
+            if (blue>100) {
+              glColor3f(9.5f, 9.5f, 9.5f);
+            }
+            else {
+              glColor3f(9.5f, 3.5f, 3.5f);
+            }
+            glVertex3f((float)x/30.f, (float)z/2.5f, (float)y/30.f);
           }
+
         }
       }  
     }

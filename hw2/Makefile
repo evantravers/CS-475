@@ -2,7 +2,7 @@ CC = g++
 CFLAGS = -Wall
 PROG = egg
 
-SRCS = main.cpp vec3f.cpp
+SRCS = main.cpp vec3f.cpp imageloader.cpp
 
 ifeq ($(shell uname),Darwin)
 	LIBS = -framework OpenGL -framework GLUT
