@@ -8,30 +8,13 @@
 #include <GL/glut.h>
 #endif
 
+#include "imageloader.h"
 #include "vec3f.h"
 
 using namespace std;
 
-class eggMesh {
-public:
-  // the builder should find a data folder, and get the images out of it, build a mesh from them.
-  eggMesh ();
-  virtual ~eggMesh () {
-    // this should destroy the mesh
-  };
+// for storing vertexes
 
-  eggMesh() {
-    // go to the data folder
-    // get images 1-9
-    // for each layer, find n points on the egg white
-    // connect vertices for fun and profit
-  }
-
-private:
-  /* data */
-  Vec3f** normals;
-  bool computedNormals;
-};
 
 float _angle = 60.0f;
 
@@ -82,8 +65,37 @@ void drawScene() {
 
   // this is where you should draw your objects
   // there had better be code here by tomorrow or I will make you sad.
-  glBegin(GL_TRIANGLES);
+  // I should take the eggMesh that I hopefully created, consisting of two solid objects 
+  // derived from the slices of the egg I took 
+  
+  glBegin(GL_POINTS);
+    // crawl the images
+    int i;
+    for (i = 0; i < 9; i++) {
+      char* filename;
+      sprintf(filename,"/data/egg%c.bmp",(char)i);
+      Image* image = loadBMP(filename);
+      int width = image->width;
+      int height = image->height;
+
+      int z = 0;
+      int x, y;
+      for (x = 0; x < width; x++) {
+        for (y = 0; y < height; y++) {
+          unsigned char redcolor = (unsigned char)image ->pixels[3*(z * image->width + x)];
+          unsigned char greencolor = (unsigned char)image ->pixels[3*(z * image->width + x)+1];
+          unsigned char bluecolor = (unsigned char)image ->pixels[3*(z * image->width + x)+2];
+          printf("%c, %c, %c\n", redcolor, greencolor, bluecolor);
+          // if the color is close to white, then draw egg
+          if (0) {
+            /* code */
+            glVertex3f((float)x, (float)y, z);
+          }
+        }
+      }  
+    }
   glEnd();
+
 
 	glutSwapBuffers();
 }
