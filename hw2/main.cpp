@@ -51,8 +51,8 @@ void drawScene() {
 	
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glTranslatef(0.0f, 0.0f, -950.0f);
-	glRotatef(30.0f, 1.0f, 0.0f, 0.0f);
+	glTranslatef(1.0f, 0.0f, -9.0f);
+	glRotatef(20.0f, 3.0f, 0.0f, 0.0f);
 	glRotatef(-_angle, 0.0f, 1.0f, 0.0f);
 	
 	GLfloat ambientColor[] = {0.4f, 0.4f, 0.4f, 1.0f};
@@ -62,7 +62,6 @@ void drawScene() {
 	GLfloat lightPos0[] = {-0.5f, 0.8f, 0.1f, 0.0f};
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, lightColor0);
 	glLightfv(GL_LIGHT0, GL_POSITION, lightPos0);
-	
   // this is where you should draw your objects
   // there had better be code here by tomorrow or I will make you sad.
   // I should take the eggMesh that I hopefully created, consisting of two solid objects 
@@ -98,7 +97,7 @@ void drawScene() {
           int blue = (int)bluecolor;
           if (red>220) {
             // then we are inside the egg
-            if (blue>110) {
+            if (blue>150) {
               // we are looking at egg white
               glColor3f(9.5f, 9.5f, 9.5f);
             }
@@ -106,23 +105,24 @@ void drawScene() {
               // this should be yolk
               glColor3f(0.7f, 0.9f, 0.1f);
             }
-            glVertex3i(x, y*20, z);
+            // x = width-x;
+            // z = height-z;
+            glVertex3f((float)x/100.0f, (float)y/4.f, (float)z/100.0f);
           }
           else {
             // glColor3f(0.0f, 0.0f, 0.9f);
-            //             glVertex3i(x, y*12, z);
+            // glVertex3i(x, y*12, z);
           }  
         }
       }
     }
   glEnd();
 
-
 	glutSwapBuffers();
 }
 
 void update(int value) {
-	_angle += 1.0f;
+	_angle += .5f;
 	if (_angle > 360) {
 		_angle -= 360;
 	}
