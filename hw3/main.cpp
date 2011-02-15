@@ -17,8 +17,12 @@ using namespace std;
 
 // for storing vertexes
 
-
-float _angle = 30.0f;
+float _angle = 60.0f;
+float _angleLat = 60.0f;
+float _angleLon = 0.0f;
+float _walk = -10.0f;
+float _stride = 0.0f;
+float _elevate = 0.0f;
 
 void cleanup() {
 }
@@ -64,44 +68,45 @@ void drawScene() {
 	glLightfv(GL_LIGHT0, GL_POSITION, lightPos0);
   // this is where you should draw your objects
   // there had better be code here by tomorrow or I will make you sad.
-  // I should take the eggMesh that I hopefully created, consisting of two solid objects 
-  // derived from the slices of the egg I took 
+  // I should take the cheeseMesh that I hopefully created, consisting of two solid objects 
+  // derived from the slices of the cheese I took 
   glBegin(GL_POINTS);
     // crawl the images
     char filename[21];
     int i=1;
+    int range = 190;
+    int sample = 1;
     // this is where you specify the number of slices
     for (i = 1; i < 5; i++) {
-      sprintf(filename, "data/%d.bmp",i);
+      sprintf(filename, "data/blurry/%d.bmp",i);
       Image* image;
       image = loadBMP(filename);
       int width = image->width;
       int height = image->height;
       int y = i;
       int x, z;
-      for (x = 0; x < width; x++) {
-        for (z = 0; z < height; z++) {
+      int target=1;
+      for (x = 0; x < width; x+=sample) {
+        for (z = 0; z < height; z+=sample) {
           unsigned char redcolor = 0;
-          unsigned char bluecolor = 0;
           redcolor = (unsigned char)image ->pixels[3*(z * image->width + x)+2];
-          // unsigned char redcolor = (unsigned char)image ->pixels[i];
-          // unsigned char greencolor = (unsigned char)image ->pixels[3*(z * image->width + x)+1];
-          bluecolor = (unsigned char)image ->pixels[3*(z * image->width + x)];
-          // printf("%f, %f, %f\n", (float)redcolor/255.0f, (float)greencolor/255.0f, (float)bluecolor/255.0f);
-          // if the color is close to white, then draw egg
-          // if red is really low, then background
-          // if red is high, and blue is high, then egg
-          // if red is high, and blue is around 100, then yolk
           int red = (int)redcolor;
-          int blue = (int)bluecolor;
-          if (red<190) {
-            // then we are inside the cheese
-            glVertex3f((float)x/100.0f, (float)y/4.f, (float)z/100.0f);
+          float xb = (float)(x-(width/2))/100.0f;
+          float yb = (float)y/7.0f;
+          float zb = (float)(z- (height/2))/100.0f;
+          // time to outline the cheese
+          if (target) {
+            if (red<range) {
+              glVertex3f(xb, yb, zb);
+              target=0;
+            }
           }
           else {
-            // glColor3f(0.0f, 0.0f, 0.9f);
-            // glVertex3i(x, y*12, z);
-          }  
+            if (red>range) {
+              glVertex3f(xb, yb, zb);
+              target=1;
+            }
+          }
         }
       }
     }
