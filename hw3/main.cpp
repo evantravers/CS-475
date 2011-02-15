@@ -32,7 +32,65 @@ void handleKeypress(unsigned char key, int x, int y) {
 		case 27: //Escape key
 			cleanup();
 			exit(0);
-	}
+    case 97: // A key
+      _angleLat += 2.0f;
+      if (_angleLat > 360) {
+      _angleLat -= 360;
+      }
+      glutPostRedisplay();
+      break;
+    case 100: // D key
+
+      _angleLat -= 2.0f;
+      if (_angleLat < 0) {
+      _angleLat -= 360;
+      }
+      glutPostRedisplay();
+      break;
+    case 119: // W key
+      _angleLon += 2.0f;
+      if (_angleLon > 360) {
+      _angleLon -= 360;
+      }
+      glutPostRedisplay();
+      break;
+    case 115: // S key
+
+      _angleLon -= 2.0f;
+      if (_angleLon < 0) {
+      _angleLon -= 360;
+      }
+      glutPostRedisplay();
+      break;
+    case 105: // I key
+      _walk += 0.5f;
+      glutPostRedisplay();
+      break;
+    case 107: // K key
+
+      _walk -= 0.5f;
+      glutPostRedisplay();
+      break;
+    case 106: // J key
+      _stride += 0.5f;
+      glutPostRedisplay();
+      break;
+    case 108: // L key
+
+      _stride -= 0.5f;
+      glutPostRedisplay();
+      break;
+    case 113: // Q key
+      _elevate += 0.5f;
+      glutPostRedisplay();
+      break;
+    case 101: // E key
+
+      _elevate -= 0.5f;
+      glutPostRedisplay();
+      break;
+}
+	
 }
 void initRendering() {
 	glEnable(GL_DEPTH_TEST);
@@ -55,9 +113,12 @@ void drawScene() {
 	
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glTranslatef(1.0f, 0.0f, -10.0f);
-	glRotatef(20.0f, 3.0f, 0.0f, 0.0f);
-	glRotatef(-_angle, 0.0f, 1.0f, 0.0f);
+	// glTranslatef(1.0f, 0.0f, -10.0f);
+	// glRotatef(20.0f, 3.0f, 0.0f, 0.0f);
+	// glRotatef(-_angle, 0.0f, 1.0f, 0.0f);
+  glTranslatef(_stride, _elevate, _walk);
+  glRotatef(-_angleLat, 0.0f, 1.0f, 0.0f);
+  glRotatef(-_angleLon, -_angleLon, 1.0f, 0.0f);
 	
 	GLfloat ambientColor[] = {0.4f, 0.4f, 0.4f, 1.0f};
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientColor);
