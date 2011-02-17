@@ -151,13 +151,13 @@ void drawScene() {
        float zb = (float)(z- (height/2))/100.0f;
        // time to outline the cheese
        if (target) {
-         if (voxels[x][y][z]>0) {
+         if (voxels[z][x][y]>0) {
            glVertex3f(xb, yb, zb);
            target=0;
          }
        }
        else {
-         if (voxels[x][y][z]==0) {
+         if (voxels[z][x][y]==0) {
            glVertex3f(xb, yb, zb);
            target=1;
          }
@@ -186,8 +186,8 @@ int main(int argc, char** argv) {
   int i=1;
   int range = 100;
   // this is where you specify the number of slices
-  for (i = 1; i < 5; i++) {
-    voxels.resize(5);
+  for (i = 1; i <= 4; i++) {
+    voxels.resize(4);
     sprintf(filename, "data/blurry/%d.bmp",i);
     Image* image;
     image = loadBMP(filename);
@@ -206,18 +206,23 @@ int main(int argc, char** argv) {
         redcolor = (unsigned char)image ->pixels[3*(z * image->width + x)];
         int red = (int)redcolor;
         // time to outline the cheese
+        printf("%d, %d, %d\n", (int)voxels.size(), (int) voxels[x].size(), (int)voxels [x][z].size());
+        printf("%d,%d,%d\n",y,x,z);
         if (target) {
           if (red<range) {
             // glVertex3f(xb, yb, zb);
-            voxels[x][y][z]=1;
+            // voxel order is z, x, y
+            voxels[y][x][z]=1;
             target=0;
+            printf("POINT\n");
           }
         }
         else {
           if (red>range) {
             // glVertex3f(xb, yb, zb);
-            voxels[x][y][z]=0;
+            voxels[y][x][z]=0;
             target=1;
+            printf("POINT\n");
           }
         }
       }
