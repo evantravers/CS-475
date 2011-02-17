@@ -13,6 +13,7 @@
 
 #include "imageloader.h"
 #include "vec3f.h"
+#include "marchingcubes.cpp"
 
 using namespace std;
 
@@ -118,9 +119,6 @@ void drawScene() {
 	
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	// glTranslatef(1.0f, 0.0f, -10.0f);
-	// glRotatef(20.0f, 3.0f, 0.0f, 0.0f);
-	// glRotatef(-_angle, 0.0f, 1.0f, 0.0f);
   glTranslatef(_stride, _elevate, _walk);
   glRotatef(-_angleLat, 0.0f, 1.0f, 0.0f);
   glRotatef(-_angleLon, -_angleLon, 1.0f, 0.0f);
@@ -135,7 +133,7 @@ void drawScene() {
   // this is where you should draw your objects
   // there had better be code here by tomorrow or I will make you sad.
   // I should take the cheeseMesh that I hopefully created, consisting of two solid objects 
-  // derived from the slices of the cheese I took 
+  // derived from the slices of the cheese I took
   glBegin(GL_POINTS);
 
   // crawl the images
@@ -198,23 +196,16 @@ int main(int argc, char** argv) {
         redcolor = (unsigned char)image ->pixels[3*(z * image->width + x)];
         int red = (int)redcolor;
         // time to outline the cheese
-        // printf("%d, %d, %d\n", (int)voxels.size(), (int) voxels[x].size(), (int)voxels [x][z].size());
-        // printf("%d,%d,%d\n",y,x,z);
         if (target) {
           if (red<range) {
-            // glVertex3f(xb, yb, zb);
-            // voxel order is z, x, y
             voxels[y][x][z]=true;
             target=0;
-            // printf("POINT\n");
           }
         }
         else {
           if (red>range) {
-            // glVertex3f(xb, yb, zb);
             voxels[y][x][z]=true;
             target=1;
-            // printf("POINT\n");
           }
         }
       }
