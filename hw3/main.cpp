@@ -15,7 +15,6 @@
 #include "vec3f.h"
 
 using namespace std;
-using std::vector;
 
 // for storing vertexes
 
@@ -25,10 +24,10 @@ float _angleLon = 0.0f;
 float _walk = -10.0f;
 float _stride = 0.0f;
 float _elevate = 0.0f;
-static int width;
-static int height;
-static vector<vector<vector<int> > > voxels;
-static int sample=1;
+int width;
+int height;
+vector<vector<vector<bool> > > voxels;
+int sample=1;
 
 void cleanup() {
 }
@@ -138,29 +137,22 @@ void drawScene() {
   // I should take the cheeseMesh that I hopefully created, consisting of two solid objects 
   // derived from the slices of the cheese I took 
   glBegin(GL_POINTS);
-    // crawl the images
-  int i = 1;
-  for (i = 1; i < 5; i++) {
+
+  // crawl the images
+  int i;
+  for (i = 0; i < 4; i++) {
     int y = i;
     int x, z;
     int target=1;
-    for (x = 0; x < width; x+=sample) {
-     for (z = 0; z < height; z+=sample) {
+    for (x = 0; x < width; x++) {
+     for (z = 0; z < height; z++) {
        float xb = (float)(x-(width/2))/100.0f;
        float yb = (float)y/7.0f;
        float zb = (float)(z- (height/2))/100.0f;
        // time to outline the cheese
-       if (target) {
-         if (voxels[z][x][y]>0) {
-           glVertex3f(xb, yb, zb);
-           target=0;
-         }
-       }
-       else {
-         if (voxels[z][x][y]==0) {
-           glVertex3f(xb, yb, zb);
-           target=1;
-         }
+       if (voxels[y][x][z]) {
+         glVertex3f(xb, yb, zb);
+         target=0;
        }
      }
    }
@@ -186,43 +178,43 @@ int main(int argc, char** argv) {
   int i=1;
   int range = 100;
   // this is where you specify the number of slices
-  for (i = 1; i <= 4; i++) {
-    voxels.resize(4);
-    sprintf(filename, "data/blurry/%d.bmp",i);
+  voxels.resize(4);
+  for (i = 0; i < 4; i++) {
+    sprintf(filename, "data/blurry/%d.bmp",i+1);
     Image* image;
     image = loadBMP(filename);
-    int width = image->width;
-    int height = image->height;
+    width = image->width;
+    height = image->height;
     // need 3d array here.
     int y = i;
     int x, z;
     int target=1;
+    voxels[y].resize(width);
     for (x = 0; x < width; x+=sample) {
-      voxels[x].resize(width);
+      voxels[y][x].resize(height);
       for (z = 0; z < height; z+=sample) {
-        voxels[x][z].resize(height);
         unsigned char redcolor = 0;
         // redcolor = (unsigned char)image ->pixels[3*(z * image->width + x)+2];
         redcolor = (unsigned char)image ->pixels[3*(z * image->width + x)];
         int red = (int)redcolor;
         // time to outline the cheese
-        printf("%d, %d, %d\n", (int)voxels.size(), (int) voxels[x].size(), (int)voxels [x][z].size());
-        printf("%d,%d,%d\n",y,x,z);
+        // printf("%d, %d, %d\n", (int)voxels.size(), (int) voxels[x].size(), (int)voxels [x][z].size());
+        // printf("%d,%d,%d\n",y,x,z);
         if (target) {
           if (red<range) {
             // glVertex3f(xb, yb, zb);
             // voxel order is z, x, y
-            voxels[y][x][z]=1;
+            voxels[y][x][z]=true;
             target=0;
-            printf("POINT\n");
+            // printf("POINT\n");
           }
         }
         else {
           if (red>range) {
             // glVertex3f(xb, yb, zb);
-            voxels[y][x][z]=0;
+            voxels[y][x][z]=true;
             target=1;
-            printf("POINT\n");
+            // printf("POINT\n");
           }
         }
       }
