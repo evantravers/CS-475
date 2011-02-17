@@ -13,7 +13,7 @@
 
 #include "imageloader.h"
 #include "vec3f.h"
-#include "marchingcubes.cpp"
+#include "marchingcubes.hpp"
 
 using namespace std;
 
@@ -28,6 +28,7 @@ float _elevate = 0.0f;
 int width;
 int height;
 vector<vector<vector<bool> > > voxels;
+vector<vertex> vertices;
 int sample=1;
 
 void cleanup() {
@@ -134,28 +135,37 @@ void drawScene() {
   // there had better be code here by tomorrow or I will make you sad.
   // I should take the cheeseMesh that I hopefully created, consisting of two solid objects 
   // derived from the slices of the cheese I took
-  glBegin(GL_POINTS);
+  // glBegin(GL_POINTS);
 
-  // crawl the images
-  int i;
-  for (i = 0; i < 4; i++) {
-    int y = i;
-    int x, z;
-    int target=1;
-    for (x = 0; x < width; x++) {
-     for (z = 0; z < height; z++) {
-       float xb = (float)(x-(width/2))/100.0f;
-       float yb = (float)y/7.0f;
-       float zb = (float)(z- (height/2))/100.0f;
-       // time to outline the cheese
-       if (voxels[y][x][z]) {
-         glVertex3f(xb, yb, zb);
-         target=0;
-       }
-     }
-   }
-  }
+  // // crawl the images
+  // int i;
+  // for (i = 0; i < 4; i++) {
+  //   int y = i;
+  //   int x, z;
+  //   int target=1;
+  //   for (x = 0; x < width; x++) {
+  //    for (z = 0; z < height; z++) {
+  //      float xb = (float)(x-(width/2))/100.0f;
+  //      float yb = (float)y/7.0f;
+  //      float zb = (float)(z- (height/2))/100.0f;
+  //      // time to outline the cheese
+  //      if (voxels[y][x][z]) {
+  //        glVertex3f(xb, yb, zb);
+  //        target=0;
+  //      }
+  //    }
+  //  }
+  // }
+  // glEnd();
+  
+  vector<vertex>::iterator it;
+  glBegin(GL_TRIANGLES);
+      for(it = vertices.begin(); it < vertices.end(); it++) {
+          glNormal3d(it->normal_x, it->normal_y, it->normal_z);
+          glVertex3d(it->x, it->y, it->z);
+      }
   glEnd();
+  
 
 	glutSwapBuffers();
 }
@@ -211,7 +221,8 @@ int main(int argc, char** argv) {
       }
     }
   }
-  
+  runMarchingCubes(voxels, 500, 500, 4, 1, 1, 1, 1.0);
+
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 	glutInitWindowSize(800, 800);
