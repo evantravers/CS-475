@@ -27,7 +27,7 @@ float _stride = 0.0f;
 float _elevate = 0.0f;
 int width;
 int height;
-vector<vector<vector<bool> > > voxels;
+bool*** voxels;
 vector<vertex> vertices;
 int sample=1;
 
@@ -135,6 +135,7 @@ void drawScene() {
   // there had better be code here by tomorrow or I will make you sad.
   // I should take the cheeseMesh that I hopefully created, consisting of two solid objects 
   // derived from the slices of the cheese I took
+
   // glBegin(GL_POINTS);
 
   // // crawl the images
@@ -158,13 +159,13 @@ void drawScene() {
   // }
   // glEnd();
   
-  vector<vertex>::iterator it;
-  glBegin(GL_TRIANGLES);
-      for(it = vertices.begin(); it < vertices.end(); it++) {
-          glNormal3d(it->normal_x, it->normal_y, it->normal_z);
-          glVertex3d(it->x, it->y, it->z);
-      }
-  glEnd();
+  // vector<vertex>::iterator it;
+  // glBegin(GL_TRIANGLES);
+  //     for(it = vertices.begin(); it < vertices.end(); it++) {
+  //         glNormal3d(it->normal_x, it->normal_y, it->normal_z);
+  //         glVertex3d(it->x, it->y, it->z);
+  //     }
+  // glEnd();
   
 
 	glutSwapBuffers();
@@ -186,7 +187,7 @@ int main(int argc, char** argv) {
   int i=1;
   int range = 100;
   // this is where you specify the number of slices
-  voxels.resize(4);
+  bool *** voxels = new bool**[4];
   for (i = 0; i < 4; i++) {
     sprintf(filename, "data/blurry/%d.bmp",i+1);
     Image* image;
@@ -197,9 +198,11 @@ int main(int argc, char** argv) {
     int y = i;
     int x, z;
     int target=1;
-    voxels[y].resize(width);
+    // voxels[y].resize(width);
+    voxels[y] = new bool*[width];
     for (x = 0; x < width; x+=sample) {
-      voxels[y][x].resize(height);
+      // voxels[y][x].resize(height);
+      voxels[y][x] = new bool[height];
       for (z = 0; z < height; z+=sample) {
         unsigned char redcolor = 0;
         // redcolor = (unsigned char)image ->pixels[3*(z * image->width + x)+2];
@@ -221,7 +224,7 @@ int main(int argc, char** argv) {
       }
     }
   }
-  runMarchingCubes(voxels, 500, 500, 4, 1, 1, 1, 1.0);
+  // runMarchingCubes(voxels, 500, 500, 4, 1, 1, 1, 1.0);
 
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);

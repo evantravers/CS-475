@@ -6,6 +6,24 @@
 #include "marchingcubes.hpp"
 vector<vertex> vertexList;
 
+uchar *** parseRawFile(char * filename, int sizeX, int sizeY, int sizeZ) {
+    uchar *** voxels = new uchar**[sizeX];
+    FILE * file = fopen(filename, "rb");
+    if(file == NULL) {
+        printf("File not found: %s", filename);
+        exit(-1);
+    }
+
+    for(int x = 0; x < sizeX; x++) {
+        voxels[x] = new uchar*[sizeY];
+        for(int y = 0; y < sizeY; y++) {
+            voxels[x][y] = new uchar[sizeZ];
+            fread(voxels[x][y], sizeof(uchar), sizeZ, file);
+        }
+    }
+    return voxels;
+}
+
 vertex interpolate(double isolevel, vertex p1, vertex p2, int valp1, int valp2) {
     if(abs(isolevel - valp1) < 0.00001)
         return p1;
@@ -74,7 +92,7 @@ void processCube(cube cube, double isolevel) {
     }
 }
 
-vector<vertex> runMarchingCubes(vector<vector<vector<bool> > > voxels, int sizeX, int sizeY, int sizeZ, 
+vector<vertex> runMarchingCubes(uchar ***voxels, int sizeX, int sizeY, int sizeZ, 
         int stepX, int stepY, int stepZ, double isovalue) {
     // Run the processCube function on every cube in the grid
 	for(int x = stepX; x < sizeX-2*stepX; x += stepX) {
