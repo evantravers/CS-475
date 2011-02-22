@@ -92,7 +92,7 @@ void processCube(cube cube, double isolevel) {
     }
 }
 
-vector<vertex> runMarchingCubes(uchar ***voxels, int sizeX, int sizeY, int sizeZ, 
+vector<vertex> runMarchingCubes(bool ***voxels, int sizeX, int sizeY, int sizeZ, 
         int stepX, int stepY, int stepZ, double isovalue) {
     // Run the processCube function on every cube in the grid
 	for(int x = stepX; x < sizeX-2*stepX; x += stepX) {

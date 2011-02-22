@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -Wall
+CFLAGS = -Wall -ggdb
 PROG = egg
 
 SRCS = main.cpp vec3f.cpp imageloader.cpp

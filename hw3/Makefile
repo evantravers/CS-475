@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -Wall
+CFLAGS = -Wall -g
 PROG = cheese
 
 SRCS = main.cpp vec3f.cpp imageloader.cpp
