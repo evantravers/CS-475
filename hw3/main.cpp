@@ -1,7 +1,7 @@
 #include <iostream>
+#include <cstdlib>
 #include <stdlib.h>
 #include <stdio.h>
-#include <math.h>
 #include <vector>
 
 #ifdef __APPLE__
@@ -13,14 +13,11 @@
 
 #include "imageloader.h"
 #include "vec3f.h"
-// #include "marchingcubes.hpp"
+#include "marchingcubes.cpp"
 
 using namespace std;
 
 // for storing vertexes
-struct vertex {
-	double x, y, z, normal_x, normal_y, normal_z;
-};
 
 float _angle = 60.0f;
 float _angleLat = 60.0f;
@@ -30,7 +27,7 @@ float _stride = 0.0f;
 float _elevate = 0.0f;
 int width;
 int height;
-bool*** voxels;
+bool *** voxels;
 vector<vertex> vertices;
 int sample=1;
 
@@ -138,38 +135,14 @@ void drawScene() {
   // there had better be code here by tomorrow or I will make you sad.
   // I should take the cheeseMesh that I hopefully created, consisting of two solid objects 
   // derived from the slices of the cheese I took
-
-  glBegin(GL_POINTS);
-
-  // crawl the images
-  int i;
-  for (i = 0; i < 4; i++) {
-    int y = i;
-    int x, z;
-    int target=1;
-    for (x = 0; x < width; x++) {
-     for (z = 0; z < height; z++) {
-       float xb = (float)(x-(width/2))/100.0f;
-       float yb = (float)y/7.0f;
-       float zb = (float)(z- (height/2))/100.0f;
-       // time to outline the cheese
-       if (voxels[y][x][z]) {
-         glVertex3f(xb, yb, zb);
-         target=0;
-       }
-     }
-   }
-  }
+  
+  vector<vertex>::iterator it;
+  glBegin(GL_TRIANGLES);
+      for(it = vertices.begin(); it < vertices.end(); it++) {
+          glNormal3d(it->normal_x, it->normal_y, it->normal_z);
+          glVertex3d(it->x, it->y, it->z);
+      }
   glEnd();
-  
-  // vector<vertex>::iterator it;
-  // glBegin(GL_TRIANGLES);
-  //     for(it = vertices.begin(); it < vertices.end(); it++) {
-  //         glNormal3d(it->normal_x, it->normal_y, it->normal_z);
-  //         glVertex3d(it->x, it->y, it->z);
-  //     }
-  // glEnd();
-  
 
 	glutSwapBuffers();
 }
@@ -190,6 +163,7 @@ int main(int argc, char** argv) {
   int i=1;
   int range = 100;
   // this is where you specify the number of slices
+  // rewrite this in xyz form, i think that's the current issue
   voxels = new bool**[4];
   for (i = 0; i < 4; i++) {
     sprintf(filename, "data/blurry/%d.bmp",i+1);
@@ -227,7 +201,7 @@ int main(int argc, char** argv) {
       }
     }
   }
-  // vertices = runMarchingCubes(voxels, 500, 500, 4, 1, 1, 1, 1.0);
+  vertices = runMarchingCubes(voxels, 4, 500, 500, 1, 1, 1, 31.0);
 
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);

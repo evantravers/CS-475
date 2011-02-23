@@ -4,8 +4,7 @@
 **/
 #ifndef MARCHING_CUBES
 #define MARCHING_CUBES
-#include <stdlib.h>
-#include <math.h>
+// #include <stdlib.h>
 #include <stdio.h>
 #include <vector>
 using namespace std;

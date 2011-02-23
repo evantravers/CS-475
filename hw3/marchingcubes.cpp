@@ -3,6 +3,7 @@
  * www.thebigblob.com
 **/
 
+#include <cmath>
 #include "marchingcubes.hpp"
 vector<vertex> vertexList;
 
@@ -25,11 +26,11 @@ uchar *** parseRawFile(char * filename, int sizeX, int sizeY, int sizeZ) {
 }
 
 vertex interpolate(double isolevel, vertex p1, vertex p2, int valp1, int valp2) {
-    if(abs(isolevel - valp1) < 0.00001)
+    if(fabs(isolevel - valp1) < 0.00001)
         return p1;
-    if(abs(isolevel - valp2) < 0.00001)
+    if(fabs(isolevel - valp2) < 0.00001)
         return p2;
-    if(abs(valp1 - valp2) < 0.00001)
+    if(fabs(valp1 - valp2) < 0.00001)
         return p1;
 
     vertex p;
@@ -92,8 +93,7 @@ void processCube(cube cube, double isolevel) {
     }
 }
 
-vector<vertex> runMarchingCubes(bool ***voxels, int sizeX, int sizeY, int sizeZ, 
-        int stepX, int stepY, int stepZ, double isovalue) {
+vector<vertex> runMarchingCubes(bool ***voxels, int sizeX, int sizeY, int sizeZ, int stepX, int stepY, int stepZ, double isovalue) {
     // Run the processCube function on every cube in the grid
 	for(int x = stepX; x < sizeX-2*stepX; x += stepX) {
 		for(int y = stepY; y < sizeY-2*stepY; y += stepY) {

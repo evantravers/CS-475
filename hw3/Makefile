@@ -1,8 +1,8 @@
 CC = g++
-CFLAGS = -Wall -g
+CFLAGS = -Wall -g -lm
 PROG = cheese
 
-SRCS = main.cpp vec3f.cpp imageloader.cpp
+SRCS = main.cpp vec3f.cpp imageloader.cpp 
 
 ifeq ($(shell uname),Darwin)
 	LIBS = -framework OpenGL -framework GLUT
