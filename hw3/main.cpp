@@ -226,7 +226,7 @@ int main(int argc, char** argv) {
       }
     }
   }
-  vertices = runMarchingCubes(voxels, 4, 500, 500, 1, 1, 1, 31.0);
+  vertices = runMarchingCubes(voxels, 4, 500, 500, 1, 5, 5, 30.0);
 
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
