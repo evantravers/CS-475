@@ -48,14 +48,14 @@ vertex interpolate(double isolevel, vertex p1, vertex p2, int valp1, int valp2) 
 
 void processCube(cube cube, double isolevel) {
     int cubeindex = 0;
-    if(cube.val[0] > isolevel) cubeindex |= 1;
-    if(cube.val[1] > isolevel) cubeindex |= 2;
-    if(cube.val[2] > isolevel) cubeindex |= 4;
-    if(cube.val[3] > isolevel) cubeindex |= 8;
-    if(cube.val[4] > isolevel) cubeindex |= 16;
-    if(cube.val[5] > isolevel) cubeindex |= 32;
-    if(cube.val[6] > isolevel) cubeindex |= 64;
-    if(cube.val[7] > isolevel) cubeindex |= 128;
+    if(cube.val[0]) cubeindex |= 1;
+    if(cube.val[1]) cubeindex |= 2;
+    if(cube.val[2]) cubeindex |= 4;
+    if(cube.val[3]) cubeindex |= 8;
+    if(cube.val[4]) cubeindex |= 16;
+    if(cube.val[5]) cubeindex |= 32;
+    if(cube.val[6]) cubeindex |= 64;
+    if(cube.val[7]) cubeindex |= 128;
 
     // Cube is entirely in/out of the surface
     if(edgeTable[cubeindex] == 0 || edgeTable[cubeindex] == 255)
@@ -100,44 +100,44 @@ vector<vertex> runMarchingCubes(bool ***voxels, int sizeX, int sizeY, int sizeZ,
 			for(int z = stepZ; z < sizeZ-2*stepZ; z += stepZ) {
 				cube c = {{
 					{x,y,z, 
-                        (double)(voxels[x+stepX][y][z]-voxels[x-stepX][y][z]) / -stepX,
-                        (double)(voxels[x][y+stepY][z]-voxels[x][y-stepY][z]) / -stepY,
-                        (double)(voxels[x][y][z+stepZ]-voxels[x][y][z-stepZ]) / -stepZ
+                        (voxels[x+stepX][y][z]-voxels[x-stepX][y][z]) / -stepX,
+                        (voxels[x][y+stepY][z]-voxels[x][y-stepY][z]) / -stepY,
+                        (voxels[x][y][z+stepZ]-voxels[x][y][z-stepZ]) / -stepZ
                     },
 					{x+stepX,y,z, 
-                        (double)(voxels[x+2*stepX][y][z]-voxels[x][y][z]) / -stepX,
-                        (double)(voxels[x+stepX][y+stepY][z]-voxels[x+stepX][y-stepY][z]) / -stepY,
-                        (double)(voxels[x+stepX][y][z+stepZ]-voxels[x+stepX][y][z-stepZ]) / -stepZ
+                        (voxels[x+2*stepX][y][z]-voxels[x][y][z]) / -stepX,
+                        (voxels[x+stepX][y+stepY][z]-voxels[x+stepX][y-stepY][z]) / -stepY,
+                        (voxels[x+stepX][y][z+stepZ]-voxels[x+stepX][y][z-stepZ]) / -stepZ
                     },
 					{x+stepX,y,z+stepZ, 
-                        (double)(voxels[x+2*stepX][y][z+stepZ]-voxels[x][y][z+stepZ]) / -stepX,
-                        (double)(voxels[x+stepX][y+stepY][z+stepZ]-voxels[x+stepX][y-stepY][z+stepZ]) / -stepY,
-                        (double)(voxels[x+stepX][y][z+2*stepZ]-voxels[x+stepX][y][z]) / -stepZ
+                        (voxels[x+2*stepX][y][z+stepZ]-voxels[x][y][z+stepZ]) / -stepX,
+                        (voxels[x+stepX][y+stepY][z+stepZ]-voxels[x+stepX][y-stepY][z+stepZ]) / -stepY,
+                        (voxels[x+stepX][y][z+2*stepZ]-voxels[x+stepX][y][z]) / -stepZ
                     },
 					{x,y,z+stepZ, 
-                        (double)(voxels[x+stepX][y][z+stepZ]-voxels[x-stepX][y][z+stepZ]) / -stepX,
-                        (double)(voxels[x][y+stepY][z+stepZ]-voxels[x][y-stepY][z+stepZ]) / -stepY,
-                        (double)(voxels[x][y][z+2*stepZ]-voxels[x][y][z]) / -stepZ
+                        (voxels[x+stepX][y][z+stepZ]-voxels[x-stepX][y][z+stepZ]) / -stepX,
+                        (voxels[x][y+stepY][z+stepZ]-voxels[x][y-stepY][z+stepZ]) / -stepY,
+                        (voxels[x][y][z+2*stepZ]-voxels[x][y][z]) / -stepZ
                     },
 					{x,y+stepY,z, 
-                        (double)(voxels[x+stepX][y+stepY][z]-voxels[x-stepX][y+stepY][z]) / -stepX,
-                        (double)(voxels[x][y+2*stepY][z]-voxels[x][y][z]) / -stepY,
-                        (double)(voxels[x][y+stepY][z+stepZ]-voxels[x][y+stepY][z-stepZ]) / -stepZ
+                        (voxels[x+stepX][y+stepY][z]-voxels[x-stepX][y+stepY][z]) / -stepX,
+                        (voxels[x][y+2*stepY][z]-voxels[x][y][z]) / -stepY,
+                        (voxels[x][y+stepY][z+stepZ]-voxels[x][y+stepY][z-stepZ]) / -stepZ
                     },
 					{x+stepX,y+stepY,z, 
-                        (double)(voxels[x+2*stepX][y+stepY][z]-voxels[x+stepX][y+stepY][z]) / -stepX,
-                        (double)(voxels[x+stepX][y+2*stepY][z]-voxels[x+stepX][y][z]) / -stepY,
-                        (double)(voxels[x+stepX][y+stepY][z+stepZ]-voxels[x+stepX][y+stepY][z-stepZ]) / -stepZ
+                        (voxels[x+2*stepX][y+stepY][z]-voxels[x+stepX][y+stepY][z]) / -stepX,
+                        (voxels[x+stepX][y+2*stepY][z]-voxels[x+stepX][y][z]) / -stepY,
+                        (voxels[x+stepX][y+stepY][z+stepZ]-voxels[x+stepX][y+stepY][z-stepZ]) / -stepZ
                     },
 					{x+stepX,y+stepY,z+stepZ, 
-                        (double)(voxels[x+2*stepX][y+stepY][z+stepZ]-voxels[x][y+stepY][z+stepZ]) / -stepX,
-                        (double)(voxels[x+stepX][y+2*stepY][z+stepZ]-voxels[x+stepX][y][z+stepZ]) / -stepY,
-                        (double)(voxels[x+stepX][y+stepY][z+2*stepZ]-voxels[x+stepX][y+stepY][z]) / -stepZ
+                        (voxels[x+2*stepX][y+stepY][z+stepZ]-voxels[x][y+stepY][z+stepZ]) / -stepX,
+                        (voxels[x+stepX][y+2*stepY][z+stepZ]-voxels[x+stepX][y][z+stepZ]) / -stepY,
+                        (voxels[x+stepX][y+stepY][z+2*stepZ]-voxels[x+stepX][y+stepY][z]) / -stepZ
                     },
 					{x,y+stepY,z+stepZ, 
-                        (double)(voxels[x+stepX][y+stepY][z+stepZ]-voxels[x-stepX][y+stepY][z+stepZ]) / -stepX,
-                        (double)(voxels[x][y+2*stepY][z+stepZ]-voxels[x][y][z+stepZ]) / -stepY,
-                        (double)(voxels[x][y+stepY][z+2*stepZ]-voxels[x][y+stepY][z]) / -stepZ
+                        (voxels[x+stepX][y+stepY][z+stepZ]-voxels[x-stepX][y+stepY][z+stepZ]) / -stepX,
+                        (voxels[x][y+2*stepY][z+stepZ]-voxels[x][y][z+stepZ]) / -stepY,
+                        (voxels[x][y+stepY][z+2*stepZ]-voxels[x][y+stepY][z]) / -stepZ
                     }
 				},{
 					voxels[x][y][z],

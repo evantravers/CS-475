@@ -116,21 +116,46 @@ void handleResize(int w, int h) {
 }
 
 void drawScene() {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-  glTranslatef(_stride, _elevate, _walk);
-  glRotatef(-_angleLat, 0.0f, 1.0f, 0.0f);
-  glRotatef(-_angleLon, -_angleLon, 1.0f, 0.0f);
-	
-	GLfloat ambientColor[] = {0.4f, 0.4f, 0.4f, 1.0f};
-	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientColor);
-	
-	GLfloat lightColor0[] = {0.6f, 0.6f, 0.6f, 1.0f};
-	GLfloat lightPos0[] = {-0.5f, 0.8f, 0.1f, 0.0f};
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, lightColor0);
-	glLightfv(GL_LIGHT0, GL_POSITION, lightPos0);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+  glShadeModel(GL_SMOOTH);
+  glEnable(GL_DEPTH_TEST);
+  glEnable(GL_LIGHTING);
+  glEnable(GL_LIGHT0);
+   
+  // Create light components
+  GLfloat ambientLight[] = { 0.2f, 0.2f, 0.2f, 1.0f };
+  GLfloat diffuseLight[] = { 0.8f, 0.8f, 0.8, 1.0f };
+  GLfloat specularLight[] = { 0.5f, 0.5f, 0.5f, 1.0f };
+  GLfloat position[] = { -1.5f, 1.0f, -4.0f, 1.0f };
+   
+  // Assign created components to GL_LIGHT0
+  glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight);
+  glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLight);
+  glLightfv(GL_LIGHT0, GL_SPECULAR, specularLight);
+  glLightfv(GL_LIGHT0, GL_POSITION, position);
+      
+  glEnable(GL_NORMALIZE);
+  glEnable(GL_COLOR_MATERIAL);
+
+  // Set material properties which will be assigned by glColor
+  glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+  float specReflection[] = { 0.8f, 0.8f, 0.8f, 1.0f };
+  glMaterialfv(GL_FRONT, GL_SPECULAR, specReflection);
+
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  glRotatef(_angle, 0.0f, 1.0f, 0.0f);
+
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
+  glPushMatrix();
+  glScalef(0.003f, 0.003f, 0.003f);
+  glColor3f(0.0f, 0.6f, 0.0f);
+  glTranslatef(0.0f, -128.0f, 32.0f);
+  glRotatef(80.0f, 0.0f, 0.0f, 1.0f);
+  
+
   // this is where you should draw your objects
   // there had better be code here by tomorrow or I will make you sad.
   // I should take the cheeseMesh that I hopefully created, consisting of two solid objects 
