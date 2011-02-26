@@ -70,30 +70,30 @@ void handleKeypress(unsigned char key, int x, int y) {
       glutPostRedisplay();
       break;
     case 105: // I key
-      _walk += 0.5f;
+      _walk += 5.f;
       glutPostRedisplay();
       break;
     case 107: // K key
 
-      _walk -= 0.5f;
+      _walk -= 5.f;
       glutPostRedisplay();
       break;
     case 106: // J key
-      _stride += 0.5f;
+      _stride += 5.f;
       glutPostRedisplay();
       break;
     case 108: // L key
 
-      _stride -= 0.5f;
+      _stride -= 5.f;
       glutPostRedisplay();
       break;
     case 113: // Q key
-      _elevate += 0.5f;
+      _elevate += 5.f;
       glutPostRedisplay();
       break;
     case 101: // E key
 
-      _elevate -= 0.5f;
+      _elevate -= 5.f;
       glutPostRedisplay();
       break;
 }
@@ -145,15 +145,19 @@ void drawScene() {
 
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  glRotatef(_angle, 0.0f, 1.0f, 0.0f);
+  // glRotatef(_angle, 0.0f, 1.0f, 0.0f);
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
   glPushMatrix();
   glScalef(0.003f, 0.003f, 0.003f);
   glColor3f(0.0f, 0.6f, 0.0f);
-  glTranslatef(0.0f, -128.0f, 32.0f);
-  glRotatef(80.0f, 0.0f, 0.0f, 1.0f);
+  glTranslatef(_stride, _elevate, _walk);
+  glRotatef(-_angleLat, 0.0f, 1.0f, 0.0f);
+  glRotatef(-_angleLon, -_angleLon, 1.0f, 0.0f);
+  
+  // glTranslatef(0.0f, -128.0f, 52.0f);
+  // glRotatef(80.0f, 0.0f, 0.0f, 1.0f);
   
 
   // this is where you should draw your objects
@@ -165,7 +169,7 @@ void drawScene() {
   glBegin(GL_TRIANGLES);
       for(it = vertices.begin(); it < vertices.end(); it++) {
           glNormal3d(it->normal_x, it->normal_y, it->normal_z);
-          glVertex3d(it->x, it->y, it->z);
+          glVertex3d(it->x*15.f, it->y, it->z);
       }
   glEnd();
 
@@ -214,7 +218,7 @@ int main(int argc, char** argv) {
       }
     }
   }
-  vertices = runMarchingCubes(voxels, 4, 500, 500, 1, 5, 5, 80.0);
+  vertices = runMarchingCubes(voxels, 4, 500, 500, 1, 5, 5, 185.0);
 
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
