@@ -112,7 +112,7 @@ void handleResize(int w, int h) {
 	glViewport(0, 0, w, h);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(50.0, (double)w / (double)h, 1.0, 900.0);
+	gluPerspective(50.0, (double)w / (double)h, 1.0, 2000.0);
 }
 
 void drawScene() {
@@ -151,8 +151,8 @@ void drawScene() {
   glLoadIdentity();
   glPushMatrix();
   glScalef(0.003f, 0.003f, 0.003f);
-  glColor3f(0.0f, 0.6f, 0.0f);
-  glTranslatef(_stride, _elevate, _walk);
+  glColor3f(0.9f, 0.9f, 0.5f);
+  glTranslatef(-_stride, _elevate, _walk);
   glRotatef(-_angleLat, 0.0f, 1.0f, 0.0f);
   glRotatef(-_angleLon, -_angleLon, 1.0f, 0.0f);
   
@@ -169,7 +169,7 @@ void drawScene() {
   glBegin(GL_TRIANGLES);
       for(it = vertices.begin(); it < vertices.end(); it++) {
           glNormal3d(it->normal_x, it->normal_y, it->normal_z);
-          glVertex3d(it->x*15.f, it->y, it->z);
+          glVertex3d(it->x*25.f, it->y, it->z);
       }
   glEnd();
 
@@ -218,7 +218,7 @@ int main(int argc, char** argv) {
       }
     }
   }
-  vertices = runMarchingCubes(voxels, 4, 500, 500, 1, 5, 5, 185.0);
+  vertices = runMarchingCubes(voxels, 4, 500, 500, 1, 5, 5, 145.0);
 
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
