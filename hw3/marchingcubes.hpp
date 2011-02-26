@@ -4,7 +4,8 @@
 **/
 #ifndef MARCHING_CUBES
 #define MARCHING_CUBES
-// #include <stdlib.h>
+#include <stdlib.h>
+#include <math.h>
 #include <stdio.h>
 #include <vector>
 using namespace std;
@@ -24,7 +25,7 @@ vertex interpolate(double isolevel, vertex p1, vertex p2, int val1, int val2);
 
 void processCube(cube cube, double isolevel);
 
-vector<vertex> runMarchingCubes(bool ***voxels, int sizeX, int sizeY, int sizeZ, int stepX, int stepY, int stepZ, double isovalue);
+vector<vertex> runMarchingCubes(double ***voxels, int sizeX, int sizeY, int sizeZ, int stepX, int stepY, int stepZ, double isovalue);
 
 static int edgeTable[256]={
 0x0  , 0x109, 0x203, 0x30a, 0x406, 0x50f, 0x605, 0x70c,

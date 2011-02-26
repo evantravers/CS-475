@@ -27,7 +27,7 @@ float _stride = 0.0f;
 float _elevate = 0.0f;
 int width;
 int height;
-bool *** voxels;
+double *** voxels;
 vector<vertex> vertices;
 int sample=1;
 
@@ -189,7 +189,7 @@ int main(int argc, char** argv) {
   int range = 100;
   // this is where you specify the number of slices
   // rewrite this in xyz form, i think that's the current issue
-  voxels = new bool**[4];
+  voxels = new double**[4];
   for (i = 0; i < 4; i++) {
     sprintf(filename, "data/blurry/%d.bmp",i+1);
     Image* image;
@@ -201,32 +201,20 @@ int main(int argc, char** argv) {
     int x, z;
     int target=1;
     // voxels[y].resize(width);
-    voxels[y] = new bool*[width];
+    voxels[y] = new double*[width];
     for (x = 0; x < width; x+=sample) {
       // voxels[y][x].resize(height);
-      voxels[y][x] = new bool[height];
+      voxels[y][x] = new double[height];
       for (z = 0; z < height; z+=sample) {
         unsigned char redcolor = 0;
         // redcolor = (unsigned char)image ->pixels[3*(z * image->width + x)+2];
         redcolor = (unsigned char)image ->pixels[3*(z * image->width + x)];
-        int red = (int)redcolor;
-        // time to outline the cheese
-        if (target) {
-          if (red<range) {
-            voxels[y][x][z]=true;
-            target=0;
-          }
-        }
-        else {
-          if (red>range) {
-            voxels[y][x][z]=true;
-            target=1;
-          }
-        }
+        double red = (double)redcolor;
+        voxels[y][x][z]=red;
       }
     }
   }
-  vertices = runMarchingCubes(voxels, 4, 500, 500, 1, 5, 5, 30.0);
+  vertices = runMarchingCubes(voxels, 4, 500, 500, 1, 5, 5, 80.0);
 
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
