@@ -112,7 +112,7 @@ void handleResize(int w, int h) {
 	glViewport(0, 0, w, h);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(50.0, (double)w / (double)h, 1.0, 2000.0);
+	gluPerspective(50.0, (double)w / (double)h, 1.0, 7000.0);
 }
 
 void drawScene() {
@@ -193,7 +193,7 @@ int main(int argc, char** argv) {
   // this is where you specify the number of slices
   // rewrite this in xyz form, i think that's the current issue
   voxels = new double**[4];
-  for (i = 0; i < 4; i++) {
+  for (i = 0; i < 5; i++) {
     sprintf(filename, "data/blurry/%d.bmp",i+1);
     Image* image;
     image = loadBMP(filename);
@@ -216,7 +216,7 @@ int main(int argc, char** argv) {
       }
     }
   }
-  vertices = runMarchingCubes(voxels, 4, 500, 500, 1, 5, 5, 145.0);
+  vertices = runMarchingCubes(voxels, 5, height, width, 1, 3, 3, 145.0);
 
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
