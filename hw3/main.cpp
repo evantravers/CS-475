@@ -190,7 +190,6 @@ int main(int argc, char** argv) {
   // build the datatype
   char filename[21];
   int i=1;
-  int range = 100;
   // this is where you specify the number of slices
   // rewrite this in xyz form, i think that's the current issue
   voxels = new double**[4];
@@ -203,7 +202,6 @@ int main(int argc, char** argv) {
     // need 3d array here.
     int y = i;
     int x, z;
-    int target=1;
     // voxels[y].resize(width);
     voxels[y] = new double*[width];
     for (x = 0; x < width; x+=sample) {
