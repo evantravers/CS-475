@@ -152,7 +152,7 @@ void drawScene() {
   glPushMatrix();
   glScalef(0.003f, 0.003f, 0.003f);
   glColor3f(0.9f, 0.9f, 0.5f);
-  glTranslatef(-_stride, _elevate, _walk);
+  glTranslatef(-_stride*20.f, _elevate, _walk);
   glRotatef(-_angleLat, 0.0f, 1.0f, 0.0f);
   glRotatef(-_angleLon, -_angleLon, 1.0f, 0.0f);
   
@@ -169,7 +169,8 @@ void drawScene() {
   glBegin(GL_TRIANGLES);
       for(it = vertices.begin(); it < vertices.end(); it++) {
           glNormal3d(it->normal_x, it->normal_y, it->normal_z);
-          glVertex3d(it->x*25.f, it->y, it->z);
+          // glVertex3d(it->x*25.f, it->y, it->z);
+          glVertex3d(it->x*25.f, it->y-200.f, it->z-(width/2));
       }
   glEnd();
 
@@ -192,8 +193,8 @@ int main(int argc, char** argv) {
   int i=1;
   // this is where you specify the number of slices
   // rewrite this in xyz form, i think that's the current issue
-  voxels = new double**[4];
-  for (i = 0; i < 5; i++) {
+  voxels = new double**[9];
+  for (i = 0; i < 8; i++) {
     sprintf(filename, "data/blurry/%d.bmp",i+1);
     Image* image;
     image = loadBMP(filename);
