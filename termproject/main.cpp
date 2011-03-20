@@ -173,18 +173,14 @@ void drawScene() {
   glScalef(0.0013f, 0.0013f, 0.0013f);
 
   glTranslatef(-_stride, _elevate, _walk);
-  glRotatef(-_angleLat, 0.f, 1.f, 0.f);
+  glRotatef(_angleLat, 0.f, 1.f, 0.f);
   glRotatef(-_angleLon, 1.f, 0.f, 0.f);
 
   glBegin(GL_QUADS);
-    glVertex3f(0.f, 0.f, 0.f);
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(0.f, 900.f, 0.f);
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(900.f, 900.f, 0.f);
-    glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(900.f, 0.f, 0.f);
-    glTexCoord2f(1.0f, 0.0f);
+    glTexCoord2d(0.0,0.0); glVertex2d(0.0,0.0);
+    glTexCoord2d(1.0,0.0); glVertex2d(900.0,0.0);
+    glTexCoord2d(1.0,1.0); glVertex2d(900.0,900.0);
+    glTexCoord2d(0.0,1.0); glVertex2d(0.0,900.0);
   glEnd();
 	glutSwapBuffers();
 }
