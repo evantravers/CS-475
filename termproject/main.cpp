@@ -22,8 +22,8 @@ float _angle = 0.0f;
 float _angleLat = 00.0f;
 float _angleLon = 0.0f;
 float _walk = -1000.0f;
-float _stride = 450.0f;
-float _elevate = -450.0f;
+float _stride = 0.0f;
+float _elevate = 0.0f;
 int width;
 int height;
 int data_length;
@@ -164,10 +164,10 @@ void drawScene() {
 
   // draw the map
   glBegin(GL_QUADS);
-    glTexCoord2d(0.0,0.0); glVertex2d(0.0,0.0);
-    glTexCoord2d(1.0,0.0); glVertex2d(900.0,0.0);
-    glTexCoord2d(1.0,1.0); glVertex2d(900.0,900.0);
-    glTexCoord2d(0.0,1.0); glVertex2d(0.0,900.0);
+    glTexCoord2d(0.f,0.f); glVertex2d(-450.f,-450.f);
+    glTexCoord2d(1.f,0.f); glVertex2d(450.f,-450.f);
+    glTexCoord2d(1.f,1.f); glVertex2d(450.f,450.f);
+    glTexCoord2d(0.f,1.f); glVertex2d(-450.f,450.f);
   glEnd();
 
 
@@ -188,7 +188,7 @@ void drawScene() {
     x_pos = (-88.202949f - coords[i].g_long)/0.007f;
     y_pos = (35.0080284f - coords[i].g_lat)/0.006f;
     // scale the pixel off the found top left corner. :P
-    glVertex3f(243.f-x_pos, 843.f-y_pos, 10.f);
+    glVertex3f(243.f-x_pos-450.f, 843.f-y_pos-450.f, 10.f);
   }
   glEnd();
 
