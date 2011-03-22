@@ -21,9 +21,9 @@ using namespace std;
 float _angle = 0.0f;
 float _angleLat = 00.0f;
 float _angleLon = 0.0f;
-float _walk = 0.0f;
-float _stride = 400.0f;
-float _elevate = -400.0f;
+float _walk = -1000.0f;
+float _stride = 450.0f;
+float _elevate = -450.0f;
 int width;
 int height;
 int data_length;
@@ -140,46 +140,29 @@ void handleResize(int w, int h) {
 	glViewport(0, 0, w, h);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(50.0, (double)w / (double)h, 1.0, 1000.0);
+	gluPerspective(50.0, (double)w / (double)h, 1.0, 1000000.0);
 }
 
 void drawScene() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-  glColor3f(1.f, 1.f, 1.f);
-  // Create light components
-  GLfloat ambientLight[] = { 0.5f, 0.5f, 0.5f, 1.0f };
-  GLfloat diffuseLight[] = { 0.8f, 0.8f, 0.8, 1.0f };
-  GLfloat specularLight[] = { 0.5f, 0.5f, 0.5f, 1.0f };
-  GLfloat position[] = { -1.5f, 1.0f, -4.0f, 1.0f };
-   
-  // Assign created components to GL_LIGHT0
-  glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight);
-  glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLight);
-  glLightfv(GL_LIGHT0, GL_SPECULAR, specularLight);
-  glLightfv(GL_LIGHT0, GL_POSITION, position);
+	glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
+  
+  // camera transforms
+  glTranslatef(-_stride, _elevate, _walk);
+  glRotatef(_angleLat, 0.f, 1.f, 0.f);
+  glRotatef(-_angleLon, 1.f, 0.f, 0.f);
       
+  // texture stuff
   glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, _textureId);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-  // draw objects here
-  
-  // Set material properties which will be assigned by glColor
-  glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
-  float specReflection[] = { 0.8f, 0.8f, 0.8f, 1.0f };
-  glMaterialfv(GL_FRONT, GL_SPECULAR, specReflection);
 
-  glLoadIdentity();
+  // sets the color back to white for the map
+  glColor3f(1.f, 1.f, 1.f);
 
-  glPushMatrix();
-  glScalef(0.0013f, 0.0013f, 0.0013f);
-
-  // printf("%f, %f, %f\n", _stride, _elevate, _walk);
-  glTranslatef(-_stride, _elevate, _walk);
-  glRotatef(_angleLat, 0.f, 1.f, 0.f);
-  glRotatef(-_angleLon, 1.f, 0.f, 0.f);
-
+  // draw the map
   glBegin(GL_QUADS);
     glTexCoord2d(0.0,0.0); glVertex2d(0.0,0.0);
     glTexCoord2d(1.0,0.0); glVertex2d(900.0,0.0);
@@ -188,10 +171,12 @@ void drawScene() {
   glEnd();
 
 
+  // sets the color to red for the points
   glColor3f(0.f, 0.f, 1.f);
+  
   // lets designate a point on the map
-  // ideally, we should read in points from a file
-
+  // read in points from a file
+  // takes in traditional lat/long
 
   float x_pos = 0.f;
   float y_pos = 0.f;
@@ -202,7 +187,8 @@ void drawScene() {
     // get the difference
     x_pos = (-88.202949f - coords[i].g_long)/0.007f;
     y_pos = (35.0080284f - coords[i].g_lat)/0.006f;
-    glVertex3f(243.f-x_pos, 843.f-y_pos, -50.f);
+    // scale the pixel off the found top left corner. :P
+    glVertex3f(243.f-x_pos, 843.f-y_pos, 10.f);
   }
   glEnd();
 

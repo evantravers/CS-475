@@ -194,7 +194,7 @@ int main(int argc, char** argv) {
   // this is where you specify the number of slices
   // rewrite this in xyz form, i think that's the current issue
   voxels = new double**[9];
-  for (i = 0; i < 8; i++) {
+  for (i = 0; i < 9; i++) {
     sprintf(filename, "data/blurry/%d.bmp",i+1);
     Image* image;
     image = loadBMP(filename);
