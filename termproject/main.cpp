@@ -204,7 +204,7 @@ void drawScene() {
     x_pos = (-88.202949f - coords[i].g_long)/0.007f;
     y_pos = (35.0080284f - coords[i].g_lat)/0.006f;
     // scale the pixel off the found top left corner. :P
-    glVertex3f(243.f-x_pos-450.f, 843.f-y_pos-450.f, (coords[i].data[worldTime])/100.f);
+    glVertex3f(243.f-x_pos-450.f, 843.f-y_pos-450.f, (coords[i].data[worldTime])/60.f);
   }
   glEnd();
 
@@ -224,8 +224,8 @@ void data_read(string inputfile) {
 
   input.open(inputfile.c_str());
 
-// count the number of lines in the text file (number of locations)
-  FILE *f=fopen("data.txt","rb");
+  // count the number of lines in the text file (number of locations)
+  FILE *f=fopen(inputfile.c_str(),"rb");
   int c=0,b;while ((b=fgetc(f))!=EOF) c+=(b==10)?1:0;fseek(f,0,SEEK_SET);
 
   // make a structure in memory to hold the coords
@@ -263,8 +263,15 @@ void data_read(string inputfile) {
 
 int main(int argc, char** argv) {
   // make a structure in memory to hold the coords
-
-  data_read("data.txt");
+  if (argc == 2) {
+    // read in the file
+    printf("%s\n", argv[1]);
+    data_read(argv[1]);
+  }
+  else {
+    printf("args: text file, scale number\n");
+    return 0;
+  }
 
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
