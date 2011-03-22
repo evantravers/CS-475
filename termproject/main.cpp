@@ -29,6 +29,7 @@ int height;
 struct GPScoord* coords;
 int rows;
 int cols;
+int worldTime=0;
 
 struct GPScoord {
   float g_lat;
@@ -56,6 +57,20 @@ void handleKeypress(unsigned char key, int x, int y) {
       _angleLat -= 2.0f;
       if (_angleLat < 0) {
       _angleLat = 360;
+      }
+      glutPostRedisplay();
+      break;
+    case 109: // M key
+      worldTime++;
+      if (worldTime > cols) {
+        worldTime=0;
+      }
+      glutPostRedisplay();
+      break;
+    case 110: // N key
+      worldTime--;
+      if (worldTime < 0) {
+        worldTime = cols;
       }
       glutPostRedisplay();
       break;
@@ -102,7 +117,6 @@ void handleKeypress(unsigned char key, int x, int y) {
       glutPostRedisplay();
       break;
     }
-	
 }
 
 //Makes the image into a texture, and returns the id of the texture
@@ -190,7 +204,7 @@ void drawScene() {
     x_pos = (-88.202949f - coords[i].g_long)/0.007f;
     y_pos = (35.0080284f - coords[i].g_lat)/0.006f;
     // scale the pixel off the found top left corner. :P
-    glVertex3f(243.f-x_pos-450.f, 843.f-y_pos-450.f, 10.f);
+    glVertex3f(243.f-x_pos-450.f, 843.f-y_pos-450.f, (coords[i].data[worldTime])/100.f);
   }
   glEnd();
 
@@ -198,11 +212,6 @@ void drawScene() {
 }
 
 void update(int value) {
-	_angle += .5f;
-	if (_angle > 360) {
-		_angle -= 360;
-	}
-	
 	glutPostRedisplay();
 	glutTimerFunc(25, update, 0);
 }
