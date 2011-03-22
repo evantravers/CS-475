@@ -206,6 +206,7 @@ void drawScene() {
     x_pos = (-88.202949f - coords[i].g_long)/0.007f;
     y_pos = (35.0080284f - coords[i].g_lat)/0.006f;
     // scale the pixel off the found top left corner. :P
+    // TODO need to redo this map based on image size, not 900x900
     glVertex3f(243.f-x_pos-450.f, 843.f-y_pos-450.f, (coords[i].data[worldTime])/100.f);
   }
   glEnd();
@@ -227,10 +228,8 @@ void data_read(string inputfile) {
   input.open(inputfile.c_str());
 
   // read in the number of rows and columns
-  input >> val;
-  input >> val2;
-  rows = atoi(val.c_str());
-  cols = atoi(val2.c_str());
+  input >> rows;
+  input >> cols;
 
   // make a structure in memory to hold the coords
   coords = new struct GPScoord[rows];
@@ -255,10 +254,19 @@ void data_read(string inputfile) {
 }
 
 int main(int argc, char** argv) {
-  // make a structure in memory to hold the coords
-
-  // validate this, add a scaling factor
-  data_read(argv[1]);
+  // TODO validate this, add a scaling factor
+  if (argc > 3) {
+    printf("args: text file, optional scaling factor\n");
+    return 0;
+  }
+  else {
+    if (argc==1) {
+      data_read("data.txt");
+    }
+    if (argc==2) {
+      data_read(argv[1]);
+    }
+  }
 
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
