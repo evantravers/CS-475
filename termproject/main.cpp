@@ -148,6 +148,8 @@ void initRendering() {
 	glShadeModel(GL_SMOOTH);
 	
 	Image* image = loadBMP("images/alabama.bmp");
+  width = image->width;
+  height = image->height;
 	_textureId = loadTexture(image);
 	delete image;
 }
@@ -224,34 +226,25 @@ void data_read(string inputfile) {
 
   input.open(inputfile.c_str());
 
-// count the number of lines in the text file (number of locations)
-  FILE *f=fopen("data.txt","rb");
-  int c=0,b;while ((b=fgetc(f))!=EOF) c+=(b==10)?1:0;fseek(f,0,SEEK_SET);
-
-  // make a structure in memory to hold the coords
-  coords = new struct GPScoord[c];
-  
-
   // read in the number of rows and columns
   input >> val;
   input >> val2;
   rows = atoi(val.c_str());
   cols = atoi(val2.c_str());
 
+  // make a structure in memory to hold the coords
+  coords = new struct GPScoord[rows];
+
   // fill in the array
   int counter = 0;
   while (!input.eof()) {
-    input >> val;
-    input >> val2;
-    tmp.g_lat = atof(val.c_str());
-    tmp.g_long = atof(val2.c_str());
-    
+    input >> tmp.g_lat;
+    input >> tmp.g_long;
     // embed the data payload
     int data_i = 0;
     float* payload = new float[cols];
     while (data_i < cols) {
-      input >> val;
-      payload[data_i] = atof(val.c_str());
+      input >> payload[data_i];
       data_i++;
     }
     tmp.data = payload;
@@ -264,7 +257,8 @@ void data_read(string inputfile) {
 int main(int argc, char** argv) {
   // make a structure in memory to hold the coords
 
-  data_read("data.txt");
+  // validate this, add a scaling factor
+  data_read(argv[1]);
 
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
