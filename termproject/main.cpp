@@ -26,12 +26,14 @@ float _stride = 0.0f;
 float _elevate = 0.0f;
 int width;
 int height;
-int data_length;
 struct GPScoord* coords;
+int rows;
+int cols;
 
 struct GPScoord {
   float g_lat;
   float g_long;
+  float* data;
 };
 
 void cleanup() {
@@ -183,7 +185,7 @@ void drawScene() {
   glPointSize(5.f);
   glBegin(GL_POINTS);
   int i;
-  for (i = 0; i < data_length; i++) {
+  for (i = 0; i < rows; i++) {
     // get the difference
     x_pos = (-88.202949f - coords[i].g_long)/0.007f;
     y_pos = (35.0080284f - coords[i].g_lat)/0.006f;
@@ -205,20 +207,27 @@ void update(int value) {
 	glutTimerFunc(25, update, 0);
 }
 
-int main(int argc, char** argv) {
-  // count the number of lines in the text file (number of locations)
-  FILE *f=fopen("data.txt","rb");
-  int c=0,b;while ((b=fgetc(f))!=EOF) c+=(b==10)?1:0;fseek(f,0,SEEK_SET);
-
-  data_length = c;
-  // make a structure in memory to hold the coords
-  coords = new struct GPScoord[c];
-
+void data_read(string inputfile) {
   string val;
   string val2;
   struct GPScoord tmp;
   fstream input;
-  input.open("data.txt");
+
+  input.open(inputfile.c_str());
+
+// count the number of lines in the text file (number of locations)
+  FILE *f=fopen("data.txt","rb");
+  int c=0,b;while ((b=fgetc(f))!=EOF) c+=(b==10)?1:0;fseek(f,0,SEEK_SET);
+
+  // make a structure in memory to hold the coords
+  coords = new struct GPScoord[c];
+  
+
+  // read in the number of rows and columns
+  input >> val;
+  input >> val2;
+  rows = atoi(val.c_str());
+  cols = atoi(val2.c_str());
 
   // fill in the array
   int counter = 0;
@@ -227,10 +236,26 @@ int main(int argc, char** argv) {
     input >> val2;
     tmp.g_lat = atof(val.c_str());
     tmp.g_long = atof(val2.c_str());
+    
+    // embed the data payload
+    int data_i = 0;
+    float* payload = new float[cols];
+    while (data_i < cols) {
+      input >> val;
+      payload[data_i] = atof(val.c_str());
+      data_i++;
+    }
+    tmp.data = payload;
     coords[counter] = tmp;
     counter++;
   }
   input.close();
+}
+
+int main(int argc, char** argv) {
+  // make a structure in memory to hold the coords
+
+  data_read("data.txt");
 
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
