@@ -39,7 +39,6 @@ struct GPScoord {
 
 void cleanup() {
 }
-
 void handleKeypress(unsigned char key, int x, int y) {
 	switch (key) {
 		case 27: //Escape key
@@ -90,12 +89,12 @@ void handleKeypress(unsigned char key, int x, int y) {
       glutPostRedisplay();
       break;
     case 105: // I key
-      _walk += 5.f;
+      _walk += 50.f;
       glutPostRedisplay();
       break;
     case 107: // K key
 
-      _walk -= 5.f;
+      _walk -= 50.f;
       glutPostRedisplay();
       break;
     case 106: // J key
@@ -198,7 +197,9 @@ void drawScene() {
 
   float x_pos = 0.f;
   float y_pos = 0.f;
-  glPointSize(5.f);
+  glPointSize(9.f);
+  glLineWidth(4.f);
+
   glBegin(GL_POINTS);
   int i;
   for (i = 0; i < rows; i++) {
@@ -207,10 +208,20 @@ void drawScene() {
     y_pos = (35.0080284f - coords[i].g_lat)/0.006f;
     // scale the pixel off the found top left corner. :P
     // TODO need to redo this map based on image size, not 900x900
-    glVertex3f(243.f-x_pos-450.f, 843.f-y_pos-450.f, (coords[i].data[worldTime])/100.f);
+    glVertex3f(243.f-x_pos-450.f, 843.f-y_pos-450.f, (coords[i].data[worldTime])/60.f);
   }
   glEnd();
 
+  glBegin(GL_LINES);
+  for (i = 0; i < rows; i++) {
+    x_pos = (-88.202949f - coords[i].g_long)/0.007f;
+    y_pos = (35.0080284f - coords[i].g_lat)/0.006f;
+    // scale the pixel off the found top left corner. :P
+    // TODO need to redo this map based on image size, not 900x900
+    glVertex3f(243.f-x_pos-450.f, 843.f-y_pos-450.f, 0.f);
+    glVertex3f(243.f-x_pos-450.f, 843.f-y_pos-450.f, (coords[i].data[worldTime])/60.f);
+  }
+  glEnd();
 	glutSwapBuffers();
 }
 
