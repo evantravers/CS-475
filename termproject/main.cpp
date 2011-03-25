@@ -30,6 +30,7 @@ struct GPScoord* coords;
 int rows;
 int cols;
 int worldTime=0;
+bool play;
 
 struct GPScoord {
   float g_lat;
@@ -104,6 +105,15 @@ void handleKeypress(unsigned char key, int x, int y) {
     case 108: // L key
 
       _stride -= 5.f;
+      glutPostRedisplay();
+      break;
+    case 112: // P key
+      if (play) {
+        play=false;
+      }
+      else {
+        play=true;
+      }
       glutPostRedisplay();
       break;
     case 113: // Q key
@@ -208,7 +218,7 @@ void drawScene() {
     y_pos = (35.0080284f - coords[i].g_lat)/0.006f;
     // scale the pixel off the found top left corner. :P
     // TODO need to redo this map based on image size, not 900x900
-    glVertex3f(243.f-x_pos-450.f, 843.f-y_pos-450.f, (coords[i].data[worldTime])/60.f);
+    glVertex3f(243.f-x_pos-450.f, 843.f-y_pos-450.f, (coords[i].data[worldTime])/30.f);
   }
   glEnd();
 
@@ -219,7 +229,7 @@ void drawScene() {
     // scale the pixel off the found top left corner. :P
     // TODO need to redo this map based on image size, not 900x900
     glVertex3f(243.f-x_pos-450.f, 843.f-y_pos-450.f, 0.f);
-    glVertex3f(243.f-x_pos-450.f, 843.f-y_pos-450.f, (coords[i].data[worldTime])/60.f);
+    glVertex3f(243.f-x_pos-450.f, 843.f-y_pos-450.f, (coords[i].data[worldTime])/30.f);
   }
   glEnd();
 	glutSwapBuffers();
@@ -228,6 +238,12 @@ void drawScene() {
 void update(int value) {
 	glutPostRedisplay();
 	glutTimerFunc(25, update, 0);
+  if (play) {
+    worldTime--;
+    if (worldTime==0) {
+      worldTime=cols;
+    }
+  }
 }
 
 void data_read(string inputfile) {
