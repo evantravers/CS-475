@@ -191,10 +191,10 @@ void drawScene() {
 
   // draw the map
   glBegin(GL_QUADS);
-    glTexCoord2d(0.f,0.f); glVertex2d(-450.f,-450.f);
-    glTexCoord2d(1.f,0.f); glVertex2d(450.f,-450.f);
-    glTexCoord2d(1.f,1.f); glVertex2d(450.f,450.f);
-    glTexCoord2d(0.f,1.f); glVertex2d(-450.f,450.f);
+    glTexCoord2d(0.f,0.f); glVertex2d(-width/2.f,-height/2.f);
+    glTexCoord2d(1.f,0.f); glVertex2d(width/2.f,-height/2.f);
+    glTexCoord2d(1.f,1.f); glVertex2d(width/2.f,height/2.f);
+    glTexCoord2d(0.f,1.f); glVertex2d(-width/2.f,height/2.f);
   glEnd();
 
 
@@ -218,7 +218,7 @@ void drawScene() {
     y_pos = (35.0080284f - coords[i].g_lat)/0.006f;
     // scale the pixel off the found top left corner. :P
     // TODO need to redo this map based on image size, not 900x900
-    glVertex3f(243.f-x_pos-450.f, 843.f-y_pos-450.f, (coords[i].data[worldTime])/30.f);
+    glVertex3f(243.f-x_pos-width/2.f, 843.f-y_pos-height/2.f, (coords[i].data[worldTime])/30.f);
   }
   glEnd();
 
@@ -228,8 +228,8 @@ void drawScene() {
     y_pos = (35.0080284f - coords[i].g_lat)/0.006f;
     // scale the pixel off the found top left corner. :P
     // TODO need to redo this map based on image size, not 900x900
-    glVertex3f(243.f-x_pos-450.f, 843.f-y_pos-450.f, 0.f);
-    glVertex3f(243.f-x_pos-450.f, 843.f-y_pos-450.f, (coords[i].data[worldTime])/30.f);
+    glVertex3f(243.f-x_pos-width/2.f, 843.f-y_pos-height/2.f, 0.f);
+    glVertex3f(243.f-x_pos-width/2.f, 843.f-y_pos-height/2.f, (coords[i].data[worldTime])/30.f);
   }
   glEnd();
 	glutSwapBuffers();
