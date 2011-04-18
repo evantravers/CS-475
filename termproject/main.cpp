@@ -32,11 +32,11 @@ int cols;
 int worldTime=0;
 bool play;
 
-struct dataSet{
-  // the first row will be the titles, then the data
-  float** data;
-  struct GPScoord coordinates;
-}
+// struct dataSet{
+//   // the first row will be the titles, then the data
+//   float** data;
+//   struct GPScoord coordinates;
+// }
 
 struct GPScoord {
   float g_lat;
@@ -252,8 +252,7 @@ void update(int value) {
 }
 
 void data_read(string inputfile) {
-
-  struct dataSet newData
+  struct GPScoord tmp;
   fstream input;
 
   input.open(inputfile.c_str());
