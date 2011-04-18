@@ -32,6 +32,12 @@ int cols;
 int worldTime=0;
 bool play;
 
+struct dataSet{
+  // the first row will be the titles, then the data
+  float** data;
+  struct GPScoord coordinates;
+}
+
 struct GPScoord {
   float g_lat;
   float g_long;
@@ -217,8 +223,7 @@ void drawScene() {
     x_pos = (-88.202949f - coords[i].g_long)/0.007f;
     y_pos = (35.0080284f - coords[i].g_lat)/0.006f;
     // scale the pixel off the found top left corner. :P
-    // TODO need to redo this map based on image size, not 900x900
-    glVertex3f(243.f-x_pos-width/2.f, 843.f-y_pos-height/2.f, (coords[i].data[worldTime])/30.f);
+    glVertex3f(243.f-x_pos-450.f, 843.f-y_pos-450.f, (coords[i].data[worldTime])/30.f);
   }
   glEnd();
 
@@ -247,9 +252,8 @@ void update(int value) {
 }
 
 void data_read(string inputfile) {
-  string val;
-  string val2;
-  struct GPScoord tmp;
+
+  struct dataSet newData
   fstream input;
 
   input.open(inputfile.c_str());
