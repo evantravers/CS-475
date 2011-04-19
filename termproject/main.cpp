@@ -142,19 +142,19 @@ void handleKeypress(unsigned char key, int x, int y) {
 //Makes the image into a texture, and returns the id of the texture
 GLuint loadTexture(Image* image) {
 	GLuint textureId;
-	glGenTextures(1, &textureId); //Make room for our texture
-	glBindTexture(GL_TEXTURE_2D, textureId); //Tell OpenGL which texture to edit
-	//Map the image to the texture
-	glTexImage2D(GL_TEXTURE_2D,                //Always GL_TEXTURE_2D
-				 0,                            //0 for now
-				 GL_RGB,                       //Format OpenGL uses for image
-				 image->width, image->height,  //Width and height
-				 0,                            //The border of the image
-				 GL_RGB, //GL_RGB, because pixels are stored in RGB format
-				 GL_UNSIGNED_BYTE, //GL_UNSIGNED_BYTE, because pixels are stored
-				                   //as unsigned numbers
-				 image->pixels);               //The actual pixel data
-	return textureId; //Returns the id of the texture
+	glGenTextures(1, &textureId);            // Make room for our texture
+	glBindTexture(GL_TEXTURE_2D, textureId); // Tell OpenGL which texture to edit
+	                                         // Map the image to the texture
+	glTexImage2D(GL_TEXTURE_2D,              // Always GL_TEXTURE_2D
+				 0,                                // 0 for now
+				 GL_RGB,                           // Format OpenGL uses for image
+				 image->width, image->height,      // Width and height
+				 0,                                // The border of the image
+				 GL_RGB,                           // GL_RGB, because pixels are stored in RGB format
+				 GL_UNSIGNED_BYTE,                 // GL_UNSIGNED_BYTE, because pixels are stored
+				                                   // as unsigned numbers
+				 image->pixels);                   // The actual pixel data
+	return textureId;                        // Returns the id of the texture
 }
 
 GLuint _textureId; //The id of the texture
@@ -223,7 +223,8 @@ void drawScene() {
 
   glBegin(GL_POINTS);
   int i;
-  for (i = 0; i < rows; i++) {
+  for (i = 0; i < numDatasets; i++) {
+    // printf("%f, %f\n", Dataset[i].coordinates.g_lat, Dataset[i].coordinates.g_long);
     // get the difference
     x_pos = (-88.202949f - Dataset[i].coordinates.g_long)/0.007f;
     y_pos = (35.0080284f - Dataset[i].coordinates.g_lat)/0.006f;
@@ -233,7 +234,7 @@ void drawScene() {
   glEnd();
 
   glBegin(GL_LINES);
-  for (i = 0; i < rows; i++) {
+  for (i = 0; i < numDatasets; i++) {
     x_pos = (-88.202949f - Dataset[i].coordinates.g_long)/0.007f;
     y_pos = (35.0080284f - Dataset[i].coordinates.g_lat)/0.006f;
     // scale the pixel off the found top left corner. :P
@@ -260,10 +261,6 @@ void data_read(string inputfile) {
   struct GPScoord tmpCoords;
   fstream input;
 
-  // read in the coords
-  input >> tmpCoords.g_lat;
-  input >> tmpCoords.g_long;
-
   // need to get the # of rows
   // this is bastardized code from stack overflow to do that.
   FILE *f=fopen(inputfile.c_str(),"rb");
@@ -272,7 +269,6 @@ void data_read(string inputfile) {
     maxRows = rows;
   }
 
-
   float * date_b         = new float[rows];
   float * unitsales_b    = new float[rows];
   float * sellingPrice_b = new float[rows];
@@ -280,10 +276,13 @@ void data_read(string inputfile) {
   float * totalForSale_b = new float[rows];
   input.open(inputfile.c_str());
 
+  // read in the coords
+  input >> tmpCoords.g_lat;
+  input >> tmpCoords.g_long;
+
   // fill in the array
   int curRow=0;
-  while (curRow<rows) {
-    printf("yeah! reading line #%d of %d!\n", curRow+1, rows);
+  while (curRow<rows+1) {
     // read in the five columns
     input >> date_b[curRow];
     input >> unitsales_b[curRow];
@@ -303,12 +302,13 @@ void data_read(string inputfile) {
   tmpData.coordinates = tmpCoords;
   Dataset[numDatasets] = tmpData;
 
+  // printf("Done! Last date\n\n value read: %f, unitSales: %f, sellingPrice: %f, totalForSale: %f \n\n", Dataset[numDatasets].date[curRow-1], Dataset[numDatasets].unitSales[curRow-1],Dataset[numDatasets].averageDays[curRow-1],Dataset[numDatasets].totalForSale[curRow-1]);
   input.close();
 }
 
 int main(int argc, char** argv) {
   // TODO validate this, add a scaling factor
-  Dataset = new struct dataSet[30];
+  Dataset = new struct dataSet[argc];
   if (argc==1) {
       printf("reading data/Birmingham.csvb...\n");
       data_read("data/Birmingham.csvb");
@@ -318,8 +318,10 @@ int main(int argc, char** argv) {
     for (i = 1; i < argc; i++) {
       printf("reading in %s...\n", argv[i]);
       data_read(argv[i]);
+      numDatasets++;
     }
   }
+  numDatasets=argc;
 
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
