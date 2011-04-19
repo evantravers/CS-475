@@ -26,22 +26,27 @@ float _stride = 0.0f;
 float _elevate = 0.0f;
 int width;
 int height;
-struct GPScoord* coords;
 int rows;
-int cols;
+int maxRows;
 int worldTime=0;
 bool play;
-
-// struct dataSet{
-//   // the first row will be the titles, then the data
-//   float** data;
-//   struct GPScoord coordinates;
-// }
+// the below is the array of csv files
+struct dataSet* Dataset;
+int numDatasets = 0;
 
 struct GPScoord {
   float g_lat;
   float g_long;
-  float* data;
+};
+
+struct dataSet{
+  // the first row will be the titles, then the data
+  char* date;
+  float* unitSales;
+  float* averageSellingPrice;
+  float* averageDays;
+  float* totalForSale;
+  struct GPScoord coordinates;
 };
 
 void cleanup() {
@@ -68,7 +73,7 @@ void handleKeypress(unsigned char key, int x, int y) {
       break;
     case 109: // M key
       worldTime++;
-      if (worldTime > cols) {
+      if (worldTime > maxRows) {
         worldTime=0;
       }
       glutPostRedisplay();
@@ -76,7 +81,7 @@ void handleKeypress(unsigned char key, int x, int y) {
     case 110: // N key
       worldTime--;
       if (worldTime < 0) {
-        worldTime = cols;
+        worldTime = maxRows;
       }
       glutPostRedisplay();
       break;
@@ -220,21 +225,21 @@ void drawScene() {
   int i;
   for (i = 0; i < rows; i++) {
     // get the difference
-    x_pos = (-88.202949f - coords[i].g_long)/0.007f;
-    y_pos = (35.0080284f - coords[i].g_lat)/0.006f;
+    x_pos = (-88.202949f - Dataset[i].coordinates.g_long)/0.007f;
+    y_pos = (35.0080284f - Dataset[i].coordinates.g_lat)/0.006f;
     // scale the pixel off the found top left corner. :P
-    glVertex3f(243.f-x_pos-450.f, 843.f-y_pos-450.f, (coords[i].data[worldTime])/30.f);
+    glVertex3f(243.f-x_pos-450.f, 843.f-y_pos-450.f, (Dataset[i].unitSales[worldTime])/30.f);
   }
   glEnd();
 
   glBegin(GL_LINES);
   for (i = 0; i < rows; i++) {
-    x_pos = (-88.202949f - coords[i].g_long)/0.007f;
-    y_pos = (35.0080284f - coords[i].g_lat)/0.006f;
+    x_pos = (-88.202949f - Dataset[i].coordinates.g_long)/0.007f;
+    y_pos = (35.0080284f - Dataset[i].coordinates.g_lat)/0.006f;
     // scale the pixel off the found top left corner. :P
     // TODO need to redo this map based on image size, not 900x900
     glVertex3f(243.f-x_pos-width/2.f, 843.f-y_pos-height/2.f, 0.f);
-    glVertex3f(243.f-x_pos-width/2.f, 843.f-y_pos-height/2.f, (coords[i].data[worldTime])/30.f);
+    glVertex3f(243.f-x_pos-width/2.f, 843.f-y_pos-height/2.f, (Dataset[i].unitSales[worldTime])/30.f);
   }
   glEnd();
 	glutSwapBuffers();
@@ -246,40 +251,66 @@ void update(int value) {
   if (play) {
     worldTime--;
     if (worldTime==0) {
-      worldTime=cols;
+      worldTime=maxRows;
     }
   }
 }
 
 void data_read(string inputfile) {
-  struct GPScoord tmp;
+  struct GPScoord tmpCoords;
   fstream input;
 
+  // read in the coords
+  input >> tmpCoords.g_lat;
+  input >> tmpCoords.g_long;
+
+  // need to get the # of rows
+  // this is bastardized code from stack overflow to do that.
+  FILE *f=fopen(inputfile.c_str(),"rb");
+  int rows=0,b;while ((b=fgetc(f))!=EOF) rows+=(b==10)?1:0;fseek(f,0,SEEK_SET);
+  if (rows > maxRows) {
+    maxRows = rows;
+  }
+
+  char* line;
+  char* tok;
+  char* date_b = new char[rows];
+  float* unitsales_b = new float[rows];
+  float* sellingPrice_b = new float[rows];
+  float* averageDays_b = new float[rows];
+  float* totalForSale_b = new float[rows];
   input.open(inputfile.c_str());
 
-  // read in the number of rows and columns
-  input >> rows;
-  input >> cols;
-
-  // make a structure in memory to hold the coords
-  coords = new struct GPScoord[rows];
-
   // fill in the array
-  int counter = 0;
-  while (!input.eof()) {
-    input >> tmp.g_lat;
-    input >> tmp.g_long;
-    // embed the data payload
-    int data_i = 0;
-    float* payload = new float[cols];
-    while (data_i < cols) {
-      input >> payload[data_i];
-      data_i++;
+  int curRow = 0;
+  while (curRow < rows) {
+    // read in the nine columns
+    // input >> date_b[rows];
+    // input >> unitsales_b[rows];
+    // input >> sellingPrice_b[rows];
+    // input >> averageDays_b[rows];
+    // input >> totalForSale_b[rows];
+    // input.ignore('\n');
+    // printf("%f\n", sellingPrice_b[rows]);
+    input.getline(line, 256);
+    tok = strtok(line, "\t");
+    while (tok != NULL) {
+      tok = strtok(NULL, "\t");
+      printf("%s\n", tok);
     }
-    tmp.data = payload;
-    coords[counter] = tmp;
-    counter++;
+    curRow+=1;
   }
+
+  // // fill the datastructure
+  // struct dataSet tmpData;
+  // tmpData.date = date_b;
+  // tmpData.unitSales = unitsales_b;
+  // tmpData.averageSellingPrice = sellingPrice_b;
+  // tmpData.averageDays = averageDays_b;
+  // tmpData.totalForSale = totalForSale_b;
+  // tmpData.coordinates = tmpCoords;
+  // Dataset[numDatasets] = tmpData;
+
   input.close();
 }
 
@@ -297,6 +328,8 @@ int main(int argc, char** argv) {
       data_read(argv[1]);
     }
   }
+
+  Dataset = new struct dataSet[30];
 
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
