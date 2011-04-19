@@ -41,7 +41,7 @@ struct GPScoord {
 
 struct dataSet{
   // the first row will be the titles, then the data
-  char* date;
+  float* date;
   float* unitSales;
   float* averageSellingPrice;
   float* averageDays;
@@ -272,64 +272,54 @@ void data_read(string inputfile) {
     maxRows = rows;
   }
 
-  char* line;
-  char* tok;
-  char* date_b = new char[rows];
-  float* unitsales_b = new float[rows];
-  float* sellingPrice_b = new float[rows];
-  float* averageDays_b = new float[rows];
-  float* totalForSale_b = new float[rows];
+
+  float * date_b         = new float[rows];
+  float * unitsales_b    = new float[rows];
+  float * sellingPrice_b = new float[rows];
+  float * averageDays_b  = new float[rows];
+  float * totalForSale_b = new float[rows];
   input.open(inputfile.c_str());
 
   // fill in the array
-  int curRow = 0;
-  while (curRow < rows) {
-    // read in the nine columns
-    // input >> date_b[rows];
-    // input >> unitsales_b[rows];
-    // input >> sellingPrice_b[rows];
-    // input >> averageDays_b[rows];
-    // input >> totalForSale_b[rows];
-    // input.ignore('\n');
-    // printf("%f\n", sellingPrice_b[rows]);
-    input.getline(line, 256);
-    tok = strtok(line, "\t");
-    while (tok != NULL) {
-      tok = strtok(NULL, "\t");
-      printf("%s\n", tok);
-    }
-    curRow+=1;
+  int curRow=0;
+  while (curRow<rows) {
+    printf("yeah! reading line #%d of %d!\n", curRow+1, rows);
+    // read in the five columns
+    input >> date_b[curRow];
+    input >> unitsales_b[curRow];
+    input >> sellingPrice_b[curRow];
+    input >> averageDays_b[curRow];
+    input >> totalForSale_b[curRow];
+    curRow++;
   }
 
-  // // fill the datastructure
-  // struct dataSet tmpData;
-  // tmpData.date = date_b;
-  // tmpData.unitSales = unitsales_b;
-  // tmpData.averageSellingPrice = sellingPrice_b;
-  // tmpData.averageDays = averageDays_b;
-  // tmpData.totalForSale = totalForSale_b;
-  // tmpData.coordinates = tmpCoords;
-  // Dataset[numDatasets] = tmpData;
+  // fill the datastructure
+  struct dataSet tmpData;
+  tmpData.date = date_b;
+  tmpData.unitSales = unitsales_b;
+  tmpData.averageSellingPrice = sellingPrice_b;
+  tmpData.averageDays = averageDays_b;
+  tmpData.totalForSale = totalForSale_b;
+  tmpData.coordinates = tmpCoords;
+  Dataset[numDatasets] = tmpData;
 
   input.close();
 }
 
 int main(int argc, char** argv) {
   // TODO validate this, add a scaling factor
-  if (argc > 3) {
-    printf("args: text file, optional scaling factor\n");
-    return 0;
-  }
-  else {
-    if (argc==1) {
-      data_read("data.txt");
-    }
-    if (argc==2) {
-      data_read(argv[1]);
-    }
-  }
-
   Dataset = new struct dataSet[30];
+  if (argc==1) {
+      printf("reading data/Birmingham.csvb...\n");
+      data_read("data/Birmingham.csvb");
+    }
+  else {
+    int i;
+    for (i = 1; i < argc; i++) {
+      printf("reading in %s...\n", argv[i]);
+      data_read(argv[i]);
+    }
+  }
 
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
