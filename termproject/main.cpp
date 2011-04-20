@@ -209,10 +209,6 @@ void drawScene() {
     glTexCoord2d(1.f,1.f); glVertex2d(width/2.f,height/2.f);
     glTexCoord2d(0.f,1.f); glVertex2d(-width/2.f,height/2.f);
   glEnd();
-
-
-  // sets the color to red for the points
-  glColor3f(0.f, 0.f, 1.f);
   
   // lets designate a point on the map
   // read in points from a file
@@ -224,7 +220,13 @@ void drawScene() {
   glLineWidth(4.f);
 
   int i;
+  float scalingFactor;
   for (i = 0; i < numDatasets; i++) {
+    // sets the color to blue for the points
+    glColor3f(0.f, 0.f, 1.f);
+    scalingFactor=30.f;
+
+    // printing the unit sales
     glBegin(GL_POINTS);
     // printf("%f, %f\n", Dataset[i].coordinates.g_lat, Dataset[i].coordinates.g_long);
     // get the difference
@@ -232,18 +234,72 @@ void drawScene() {
     y_pos = (35.0080284f - Dataset[i].coordinates.g_lat)/0.006f;
     // scale the pixel off the found top left corner. P
     if (worldTime < Dataset[i].numRows) {
-      glVertex3f(243.f-x_pos-450.f, 843.f-y_pos-450.f, (Dataset[i].unitSales[worldTime])/30.f);
+      glVertex3f(243.f-x_pos-450.f, 843.f-y_pos-450.f, (Dataset[i].unitSales[worldTime])/scalingFactor);
     }
     glEnd();
 
     glBegin(GL_LINES);
-    x_pos = (-88.202949f - Dataset[i].coordinates.g_long)/0.007f;
-    y_pos = (35.0080284f - Dataset[i].coordinates.g_lat)/0.006f;
     // scale the pixel off the found top left corner. :P
     // TODO need to redo this map based on image size, not 900x900
     if (worldTime < Dataset[i].numRows) {
       glVertex3f(243.f-x_pos-width/2.f, 843.f-y_pos-height/2.f, 0.f);
-      glVertex3f(243.f-x_pos-width/2.f, 843.f-y_pos-height/2.f, (Dataset[i].unitSales[worldTime])/30.f);
+      glVertex3f(243.f-x_pos-width/2.f, 843.f-y_pos-height/2.f, (Dataset[i].unitSales[worldTime])/scalingFactor);
+    }
+    glEnd();
+
+    // sets the color to red for the points
+    glColor3f(1.f, 0.f, 0.f);
+    scalingFactor=3000.f;
+
+    // average selling price, scaled by 3000 right now
+    glBegin(GL_POINTS);
+    // printf("%f, %f\n", Dataset[i].coordinates.g_lat, Dataset[i].coordinates.g_long);
+    // get the difference
+    x_pos = (-88.202949f - Dataset[i].coordinates.g_long)/0.007f;
+    y_pos = (35.0080284f - Dataset[i].coordinates.g_lat)/0.006f;
+    // move the second column
+    x_pos-=5;
+    y_pos-=5;
+    // scale the pixel off the found top left corner. P
+    if (worldTime < Dataset[i].numRows) {
+      glVertex3f(243.f-x_pos-450.f, 843.f-y_pos-450.f, (Dataset[i].averageSellingPrice[worldTime])/scalingFactor);
+    }
+    glEnd();
+
+    glBegin(GL_LINES);
+    // scale the pixel off the found top left corner. :P
+    // TODO need to redo this map based on image size, not 900x900
+    if (worldTime < Dataset[i].numRows) {
+      glVertex3f(243.f-x_pos-width/2.f, 843.f-y_pos-height/2.f, 0.f);
+      glVertex3f(243.f-x_pos-width/2.f, 843.f-y_pos-height/2.f, (Dataset[i].averageSellingPrice[worldTime])/scalingFactor);
+    }
+    glEnd();
+
+    // sets the color to yellow for the points
+    glColor3f(0.5f, 0.5f, 0.f);
+    scalingFactor=30.f;
+    
+    // average selling price, scaled by 3000 right now
+    glBegin(GL_POINTS);
+    // printf("%f, %f\n", Dataset[i].coordinates.g_lat, Dataset[i].coordinates.g_long);
+    // get the difference
+    x_pos = (-88.202949f - Dataset[i].coordinates.g_long)/0.007f;
+    y_pos = (35.0080284f - Dataset[i].coordinates.g_lat)/0.006f;
+    // move the second column
+    x_pos+=5;
+    y_pos-=5;
+    // scale the pixel off the found top left corner. P
+    if (worldTime < Dataset[i].numRows) {
+      glVertex3f(243.f-x_pos-450.f, 843.f-y_pos-450.f, (Dataset[i].totalForSale[worldTime])/scalingFactor);
+    }
+    glEnd();
+
+    glBegin(GL_LINES);
+    // scale the pixel off the found top left corner. :P
+    // TODO need to redo this map based on image size, not 900x900
+    if (worldTime < Dataset[i].numRows) {
+      glVertex3f(243.f-x_pos-width/2.f, 843.f-y_pos-height/2.f, 0.f);
+      glVertex3f(243.f-x_pos-width/2.f, 843.f-y_pos-height/2.f, (Dataset[i].totalForSale[worldTime])/scalingFactor);
     }
     glEnd();
   }
@@ -260,7 +316,13 @@ void update(int value) {
       worldTime=maxRows;
     }
   }
-  printf("%d: Date is: %f\n", worldTime, Dataset[longest-1].date[worldTime]);
+  printf("longest: %i\n", longest);
+  if (longest > 0 ) {
+    printf("%d: Date is: %f\n", worldTime, Dataset[longest-1].date[worldTime]);
+  }
+  else {
+    printf("%d: Date is: %f\n", worldTime, Dataset[0].date[worldTime]);
+  }
 }
 
 void data_read(string inputfile) {
@@ -318,10 +380,9 @@ int main(int argc, char** argv) {
   // TODO validate this, add a scaling factor
   Dataset = new struct dataSet[argc];
   if (argc==1) {
-      printf("reading data/Birmingham.data...\n");
-      data_read("data/Birmingham.data");
-
-    }
+    printf("reading data/Birmingham.data...\n");
+    data_read("data/Birmingham.data");
+  }
   else {
     int i;
     for (i = 1; i < argc; i++) {

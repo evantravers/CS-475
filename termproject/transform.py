@@ -16,7 +16,7 @@ for file in sys.argv[1:]:
       line2 = re.sub(r'"(\d*),(\d*)"', r'\1\2', line)
       line3 = re.sub(r',', r'\t', line2)
       line4 = re.sub(r'(.*)\t(.*)\t(.*)\t(.*)\t(.*)\t(.*)\t(.*)\t(.*)', r'\1\t\2\t\4\t\5', line3)
-      line5 = re.sub(r'/',r'', line4)
+      line5 = re.sub(r'(\d*)/(\d*)/(\d*)',r'\1\3', line4)
       OUTPUTFILE.write(line5)
   FILE.close()
   OUTPUTFILE.close()
