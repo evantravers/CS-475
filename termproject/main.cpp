@@ -28,6 +28,7 @@ int width;
 int height;
 int rows;
 int maxRows;
+int longest;
 int worldTime=0;
 bool play;
 // the below is the array of csv files
@@ -260,6 +261,7 @@ void update(int value) {
       worldTime=maxRows;
     }
   }
+  printf("%d: Date is: %f\n", worldTime, Dataset[longest-1].date[worldTime]);
 }
 
 void data_read(string inputfile) {
@@ -272,6 +274,7 @@ void data_read(string inputfile) {
   int rows=0,b;while ((b=fgetc(f))!=EOF) rows+=(b==10)?1:0;fseek(f,0,SEEK_SET);
   if (rows > maxRows) {
     maxRows = rows;
+    longest = numDatasets;
   }
 
   float * date_b         = new float[rows];
@@ -316,8 +319,8 @@ int main(int argc, char** argv) {
   // TODO validate this, add a scaling factor
   Dataset = new struct dataSet[argc];
   if (argc==1) {
-      printf("reading data/Birmingham.csvb...\n");
-      data_read("data/Birmingham.csvb");
+      printf("reading data/Birmingham.data...\n");
+      data_read("data/Birmingham.data");
     }
   else {
     int i;
