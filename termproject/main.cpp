@@ -47,6 +47,7 @@ struct dataSet{
   float* averageDays;
   float* totalForSale;
   struct GPScoord coordinates;
+  int numRows;
 };
 
 void cleanup() {
@@ -228,8 +229,10 @@ void drawScene() {
     // get the difference
     x_pos = (-88.202949f - Dataset[i].coordinates.g_long)/0.007f;
     y_pos = (35.0080284f - Dataset[i].coordinates.g_lat)/0.006f;
-    // scale the pixel off the found top left corner. :P
-    glVertex3f(243.f-x_pos-450.f, 843.f-y_pos-450.f, (Dataset[i].unitSales[worldTime])/30.f);
+    // scale the pixel off the found top left corner. P
+    if (worldTime < Dataset[i].numRows) {
+      glVertex3f(243.f-x_pos-450.f, 843.f-y_pos-450.f, (Dataset[i].unitSales[worldTime])/30.f);
+    }
   }
   glEnd();
 
@@ -239,8 +242,10 @@ void drawScene() {
     y_pos = (35.0080284f - Dataset[i].coordinates.g_lat)/0.006f;
     // scale the pixel off the found top left corner. :P
     // TODO need to redo this map based on image size, not 900x900
-    glVertex3f(243.f-x_pos-width/2.f, 843.f-y_pos-height/2.f, 0.f);
-    glVertex3f(243.f-x_pos-width/2.f, 843.f-y_pos-height/2.f, (Dataset[i].unitSales[worldTime])/30.f);
+    if (worldTime < Dataset[i].numRows) {
+      glVertex3f(243.f-x_pos-width/2.f, 843.f-y_pos-height/2.f, 0.f);
+      glVertex3f(243.f-x_pos-width/2.f, 843.f-y_pos-height/2.f, (Dataset[i].unitSales[worldTime])/30.f);
+    }
   }
   glEnd();
 	glutSwapBuffers();
@@ -300,6 +305,7 @@ void data_read(string inputfile) {
   tmpData.averageDays = averageDays_b;
   tmpData.totalForSale = totalForSale_b;
   tmpData.coordinates = tmpCoords;
+  tmpData.numRows = rows;
   Dataset[numDatasets] = tmpData;
 
   // printf("Done! Last date\n\n value read: %f, unitSales: %f, sellingPrice: %f, totalForSale: %f \n\n", Dataset[numDatasets].date[curRow-1], Dataset[numDatasets].unitSales[curRow-1],Dataset[numDatasets].averageDays[curRow-1],Dataset[numDatasets].totalForSale[curRow-1]);
