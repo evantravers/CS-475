@@ -223,9 +223,9 @@ void drawScene() {
   glPointSize(9.f);
   glLineWidth(4.f);
 
-  glBegin(GL_POINTS);
   int i;
   for (i = 0; i < numDatasets; i++) {
+    glBegin(GL_POINTS);
     // printf("%f, %f\n", Dataset[i].coordinates.g_lat, Dataset[i].coordinates.g_long);
     // get the difference
     x_pos = (-88.202949f - Dataset[i].coordinates.g_long)/0.007f;
@@ -234,11 +234,9 @@ void drawScene() {
     if (worldTime < Dataset[i].numRows) {
       glVertex3f(243.f-x_pos-450.f, 843.f-y_pos-450.f, (Dataset[i].unitSales[worldTime])/30.f);
     }
-  }
-  glEnd();
+    glEnd();
 
-  glBegin(GL_LINES);
-  for (i = 0; i < numDatasets; i++) {
+    glBegin(GL_LINES);
     x_pos = (-88.202949f - Dataset[i].coordinates.g_long)/0.007f;
     y_pos = (35.0080284f - Dataset[i].coordinates.g_lat)/0.006f;
     // scale the pixel off the found top left corner. :P
@@ -247,8 +245,9 @@ void drawScene() {
       glVertex3f(243.f-x_pos-width/2.f, 843.f-y_pos-height/2.f, 0.f);
       glVertex3f(243.f-x_pos-width/2.f, 843.f-y_pos-height/2.f, (Dataset[i].unitSales[worldTime])/30.f);
     }
+    glEnd();
   }
-  glEnd();
+
 	glutSwapBuffers();
 }
 
@@ -321,6 +320,7 @@ int main(int argc, char** argv) {
   if (argc==1) {
       printf("reading data/Birmingham.data...\n");
       data_read("data/Birmingham.data");
+
     }
   else {
     int i;

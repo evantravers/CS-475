@@ -1,9 +1,11 @@
 import sys
 import re
 
+# TODO get the coords automatically by lat/longing the filename + "AL".
 for file in sys.argv[1:]:
   FILE = open(file)
-  OUTPUTFILE = open(file+"b", "w")
+  outfile = file.replace('csv','data')
+  OUTPUTFILE = open(outfile, "w")
   firstLine = True
   for line in FILE:
     if firstLine:
