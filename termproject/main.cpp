@@ -7,9 +7,9 @@
 
 #ifdef __APPLE__
 #include <OpenGL/OpenGL.h>
-#include <GLUT/glut.h>
+#include <GL/freeglut.h>
 #else
-#include <GL/glut.h>
+#include <GL/freeglut.h>
 #endif
 
 #include "imageloader.h"
@@ -408,4 +408,5 @@ int main(int argc, char** argv) {
 	glutMainLoop();
 	return 0;
 }
+
 
