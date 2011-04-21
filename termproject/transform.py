@@ -6,7 +6,7 @@ import re
 from geopy import geocoders
 
 for file in sys.argv[1:]:
-  print "working on " + file + "..."
+  print("working on " + file + "...")
   FILE = open(file)
   outfile = file.replace('csv','data')
   OUTPUTFILE = open(outfile, "w")
